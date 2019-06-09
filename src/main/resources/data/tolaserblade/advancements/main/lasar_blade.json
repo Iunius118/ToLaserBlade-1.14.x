@@ -1,0 +1,35 @@
+{
+  "parent": "tolaserblade:main/root",
+  "display": {
+    "icon": {
+      "item": "tolaserblade:lasar_blade"
+    },
+    "title": {
+      "translate": "advancements.tolaserblade.main.lasar_blade.title"
+    },
+    "description": {
+      "translate": "advancements.tolaserblade.main.lasar_blade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_lasar_blade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tolaserblade:lasar_blade"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_lasar_blade"
+    ]
+  ]
+}

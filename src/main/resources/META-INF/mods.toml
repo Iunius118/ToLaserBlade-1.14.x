@@ -1,0 +1,29 @@
+
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/Iunius118/ToLaserBlade/issues"
+logoFile="tolaserblade_logo.png"
+
+[[mods]]
+modId="tolaserblade"
+version="${version}"
+displayName="ToLaserBlade"
+updateJSONURL="https://raw.githubusercontent.com/Iunius118/ToLaserBlade/master/update.json"
+displayURL="https://github.com/Iunius118/ToLaserBlade"
+logoFile="tolaserblade_logo.png"
+credits="Iunius118"
+authors="Iunius118"
+description="Adds a Laser Blade."
+
+[[dependencies.tolaserblade]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.tolaserblade]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,11 @@
+{
+  "type": "tolaserblade:crafting_laser_blade_dyeing",
+  "ingredients": [
+    {
+      "item": "tolaserblade:laser_blade"
+    }
+  ],
+  "result": {
+    "item": "tolaserblade:laser_blade"
+  }
+}

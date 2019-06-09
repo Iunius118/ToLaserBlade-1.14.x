@@ -1,0 +1,33 @@
+﻿{
+  "item.tolaserblade.laser_blade": "レーザーブレイド",
+  "item.tolaserblade.laser_blade_core": "レーザーブレイドのコア",
+  "item.tolaserblade.lasar_blade": "レーザーブレ一ド",
+
+  "tolaserblade.update.newversion": "%s の新しいバージョンが利用可能です",
+
+  "tolaserblade.configgui.enableLaserBlade3DModel": "レーザーブレイドを3Dモデルで描画する",
+  "tolaserblade.configgui.laserBladeRenderingMode": "レーザーブレイドの描画モード（0–1）",
+  "tolaserblade.configgui.enableBlockingWithLaserBlade": "レーザーブレイドによる防御を有効にする",
+  "tolaserblade.configgui.laserBladeEfficiency": "レーザーブレイドの採掘速度（0–128）",
+
+  "advancements.tolaserblade.main.root.title": "ToLaserBlade",
+  "advancements.tolaserblade.main.root.description": "レーザーブレイドは切削工具です。武器として使用した際に発生した損害は、すべて補償の対象外となります。",
+  "advancements.tolaserblade.main.lasar_blade.title": "レーザーブレイド？",
+  "advancements.tolaserblade.main.lasar_blade.description": "レーザーブレ一ドをクラフトする。その刃は赤く輝いているという。",
+  "advancements.tolaserblade.main.laser_blade.title": "レーザーブレイド",
+  "advancements.tolaserblade.main.laser_blade.description": "レーザーブレイドをクラフトする。その刃は赤く輝いているという。",
+  "advancements.tolaserblade.main.break_laser_blade.title": "返品交換",
+  "advancements.tolaserblade.main.break_laser_blade.description": "レーザーブレイドを使い切り、そして…",
+  "advancements.tolaserblade.main.laser_blade_looting_3.title": "３つくれ",
+  "advancements.tolaserblade.main.laser_blade_looting_3.description": "レーザーブレイドに ドロップ増加 Ⅲ のエンチャントを付与する。",
+  "advancements.tolaserblade.main.laser_blade_class_2.title": "超古代技術",
+  "advancements.tolaserblade.main.laser_blade_class_2.description": "レーザーブレイドに アンデッド特効 Ⅱ のエンチャントを付与する。",
+  "advancements.tolaserblade.main.laser_blade_smite_5.title": "光のチカラ",
+  "advancements.tolaserblade.main.laser_blade_smite_5.description": "レーザーブレイドに アンデッド特効 Ⅴ のエンチャントを付与する。",
+  "advancements.tolaserblade.main.laser_blade_smite_10.title": "無限のパワー",
+  "advancements.tolaserblade.main.laser_blade_smite_10.description": "レーザーブレイドに アンデッド特効 Ⅹ のエンチャントを付与する。",
+  "advancements.tolaserblade.main.laser_blade_attack_10.title": "９以上だ",
+  "advancements.tolaserblade.main.laser_blade_attack_10.description": "レーザーブレイドの攻撃力を10以上にする。",
+  "advancements.tolaserblade.main.laser_blade_attack_15.title": "限界突破",
+  "advancements.tolaserblade.main.laser_blade_attack_15.description": "レーザーブレイドの攻撃力を15にする。"
+}

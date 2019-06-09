@@ -1,0 +1,72 @@
+{
+  "parent": "tolaserblade:main/laser_blade_class_2",
+  "display": {
+    "icon": {
+      "item": "minecraft:diamond_block"
+    },
+    "title": {
+      "translate": "advancements.tolaserblade.main.laser_blade_attack_10.title"
+    },
+    "description": {
+      "translate": "advancements.tolaserblade.main.laser_blade_attack_10.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has_laser_blade_attack_10": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tolaserblade:laser_blade",
+            "nbt": "{\"ATK\":3f}"
+          }
+        ]
+      }
+    },
+    "has_laser_blade_attack_11": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tolaserblade:laser_blade",
+            "nbt": "{\"ATK\":4f}"
+          }
+        ]
+      }
+    },
+    "has_laser_blade_attack_14": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tolaserblade:laser_blade",
+            "nbt": "{\"ATK\":7f}"
+          }
+        ]
+      }
+    },
+    "has_laser_blade_attack_15": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tolaserblade:laser_blade",
+            "nbt": "{\"ATK\":8f}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_laser_blade_attack_10",
+      "has_laser_blade_attack_11",
+      "has_laser_blade_attack_14",
+      "has_laser_blade_attack_15"
+    ]
+  ]
+}

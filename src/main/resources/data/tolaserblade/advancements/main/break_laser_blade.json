@@ -1,0 +1,39 @@
+{
+  "parent": "tolaserblade:main/laser_blade",
+  "display": {
+    "icon": {
+      "item": "tolaserblade:laser_blade_core"
+    },
+    "title": {
+      "translate": "advancements.tolaserblade.main.break_laser_blade.title"
+    },
+    "description": {
+      "translate": "advancements.tolaserblade.main.break_laser_blade.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  },
+  "criteria": {
+    "broke_laser_blade": {
+      "trigger": "minecraft:item_durability_changed",
+      "conditions": {
+        "item": {
+          "item": "tolaserblade:laser_blade"
+        },
+        "durability": {
+          "max": 0
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "broke_laser_blade"
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+﻿{
+  "item.tolaserblade.laser_blade": "Laser Blade",
+  "item.tolaserblade.laser_blade_core": "Laser Blade Core",
+  "item.tolaserblade.lasar_blade": "Laser B1ade",
+
+  "tolaserblade.update.newversion": "A new %s version is available",
+
+  "tolaserblade.configgui.enableLaserBlade3DModel": "Enable Laser Blade 3D Model",
+  "tolaserblade.configgui.laserBladeRenderingMode": "Laser Blade Rendering mode (0–1)",
+  "tolaserblade.configgui.enableBlockingWithLaserBlade": "Enable Blocking with Laser Blade",
+  "tolaserblade.configgui.laserBladeEfficiency": "Laser Blade Mining Speed (0–128)",
+
+  "advancements.tolaserblade.main.root.title": "ToLaserBlade",
+  "advancements.tolaserblade.main.root.description": "Laser Blade is a tool used to cut through material, so any damage caused by using as a weapon is not covered by the warranty.",
+  "advancements.tolaserblade.main.lasar_blade.title": "Laser Blade?",
+  "advancements.tolaserblade.main.lasar_blade.description": "Obtain a laser b1ade. It has a shining red blade.",
+  "advancements.tolaserblade.main.laser_blade.title": "Laser Blade",
+  "advancements.tolaserblade.main.laser_blade.description": "Obtain a laser blade. It has a shining red blade.",
+  "advancements.tolaserblade.main.break_laser_blade.title": "Returns and Exchanges",
+  "advancements.tolaserblade.main.break_laser_blade.description": "Completely use up a laser blade, and then...",
+  "advancements.tolaserblade.main.laser_blade_looting_3.title": "Give Me Three",
+  "advancements.tolaserblade.main.laser_blade_looting_3.description": "Add Looting III enchantment to a laser blade.",
+  "advancements.tolaserblade.main.laser_blade_class_2.title": "Ancient Technology",
+  "advancements.tolaserblade.main.laser_blade_class_2.description": "Add Smite II enchantment to a laser blade.",
+  "advancements.tolaserblade.main.laser_blade_smite_5.title": "Power of Light",
+  "advancements.tolaserblade.main.laser_blade_smite_5.description": "Add Smite V enchantment to a laser blade.",
+  "advancements.tolaserblade.main.laser_blade_smite_10.title": "Unlimited Power",
+  "advancements.tolaserblade.main.laser_blade_smite_10.description": "Add Smite X enchantment to a laser blade.",
+  "advancements.tolaserblade.main.laser_blade_attack_10.title": "It's Over 9",
+  "advancements.tolaserblade.main.laser_blade_attack_10.description": "Increase attack damage of a laser blade to 10 or more.",
+  "advancements.tolaserblade.main.laser_blade_attack_15.title": "Beyond the Limit",
+  "advancements.tolaserblade.main.laser_blade_attack_15.description": "Increase attack damage of a laser blade to 15."
+}
+
