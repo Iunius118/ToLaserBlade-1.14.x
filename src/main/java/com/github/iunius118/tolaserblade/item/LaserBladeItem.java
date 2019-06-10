@@ -103,7 +103,7 @@ public class LaserBladeItem extends SwordItem {
             // Consume Iron Axe damage
             ItemStack ironAxe = right.copy();
             PlayerEntity player = event.getEntityPlayer();
-            ironAxe.func_222118_a(1, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
+            ironAxe.func_222118_a(10, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
             player.addItemStackToInventory(ironAxe);
         }
     }
