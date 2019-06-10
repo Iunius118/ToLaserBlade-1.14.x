@@ -3,26 +3,29 @@ package com.github.iunius118.tolaserblade.item.crafting;
 import com.github.iunius118.tolaserblade.ToLaserBlade;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 // Recipe Laser Blade - dyeing
-public class RecipeLaserBladeDyeing extends ShapelessRecipe {
-    public RecipeLaserBladeDyeing(ResourceLocation idIn, String groupIn, ItemStack recipeOutputIn, NonNullList<Ingredient> recipeItemsIn) {
+public class LaserBladeDyeingRecipe extends ShapelessRecipe {
+    public LaserBladeDyeingRecipe(ResourceLocation idIn, String groupIn, ItemStack recipeOutputIn, NonNullList<Ingredient> recipeItemsIn) {
         super(idIn, groupIn, recipeOutputIn, recipeItemsIn);
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ToLaserBlade.CRAFTING_LASER_BLADE_DYEING;
+        return ToLaserBlade.RecipeSerializers.CRAFTING_LASER_BLADE_DYEING;
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, World worldIn) {
         // Force simple matching
         RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
         int i = 0;
@@ -41,7 +44,7 @@ public class RecipeLaserBladeDyeing extends ShapelessRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getCraftingResult(CraftingInventory inv) {
         for (int i = 0; i < inv.getHeight(); ++i) {
             for (int j = 0; j < inv.getWidth(); ++j) {
                 ItemStack itemstack = inv.getStackInSlot(j + i * inv.getWidth());
@@ -63,17 +66,12 @@ public class RecipeLaserBladeDyeing extends ShapelessRecipe {
 
     // tolaserblade:crafting_laser_blade_dyeing
     public static class Serializer extends ShapelessRecipe.Serializer {
-        private static final ResourceLocation NAME = new ResourceLocation("tolaserblade", "crafting_laser_blade_dyeing");
+        public static final ResourceLocation NAME = new ResourceLocation("tolaserblade", "crafting_laser_blade_dyeing");
 
         @Override
         public ShapelessRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ShapelessRecipe recipe = RecipeSerializers.CRAFTING_SHAPELESS.read(recipeId, json);
-            return new RecipeLaserBladeDyeing(recipe.getId(), recipe.getGroup(), recipe.getRecipeOutput(), recipe.getIngredients());
-        }
-
-        @Override
-        public ResourceLocation getName() {
-            return NAME;
+            ShapelessRecipe recipe = IRecipeSerializer.field_222158_b.read(recipeId, json);    // field_222158_b = ShapelessRecipe.Serializer object
+            return new LaserBladeDyeingRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeOutput(), recipe.getIngredients());
         }
     }
 }

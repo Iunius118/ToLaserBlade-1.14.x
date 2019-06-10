@@ -2,45 +2,45 @@ package com.github.iunius118.tolaserblade.item;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemLasarBlade extends ItemSword {
+public class LasarBladeItem extends SwordItem {
 
-    private final IItemTier tier = new ItemLasarBlade.ItemTier();
+    private final IItemTier tier = new LasarBladeItem.ItemTier();
     private final float attackDamage;
     private final float attackSpeed;
 
-    public ItemLasarBlade() {
-        super(new ItemLasarBlade.ItemTier(), 3, -1.2F, (new Item.Properties()).group(ItemGroup.TOOLS));
+    public LasarBladeItem() {
+        super(new LasarBladeItem.ItemTier(), 3, -1.2F, (new Item.Properties()).group(ItemGroup.TOOLS));
 
         attackDamage = 3.0F + tier.getAttackDamage();
         attackSpeed = -1.2F;
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemUseContext context) {
+    public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
-        EntityPlayer player = context.getPlayer();
+        PlayerEntity player = context.getPlayer();
         ItemStack itemstack = context.getItem();
         BlockPos pos = context.getPos();
-        EnumFacing facing = context.getFace();
+        Direction facing = context.getFace();
 
-        if (!(itemstack.getItem() instanceof ItemLasarBlade)) {
-            return EnumActionResult.PASS;
+        if (!(itemstack.getItem() instanceof LasarBladeItem)) {
+            return ActionResultType.PASS;
         }
 
-        IBlockState blockstate = world.getBlockState(pos);
+        BlockState blockstate = world.getBlockState(pos);
         Block block = blockstate.getBlock();
         int costDamage = tier.getMaxUses() / 2 + 1;
 
@@ -48,14 +48,14 @@ public class ItemLasarBlade extends ItemSword {
 
         if (block == Blocks.REDSTONE_TORCH && player.canPlayerEdit(pos, facing, itemstack)) {
             int itemDamage = itemstack.getDamage();
-            if (itemDamage >= costDamage || player.abilities.isCreativeMode) {
+            if (itemDamage >= costDamage || player.playerAbilities.isCreativeMode) {
                 // Repair this
                 itemstack.setDamage(itemDamage - costDamage);
             } else {
                 // Collect a Redstone Torch
                 if (!player.inventory.addItemStackToInventory(new ItemStack(Blocks.REDSTONE_TORCH))) {
                     // Cannot collect because player's inventory is full
-                    return EnumActionResult.FAIL;
+                    return ActionResultType.FAIL;
                 }
             }
 
@@ -64,23 +64,23 @@ public class ItemLasarBlade extends ItemSword {
                 world.destroyBlock(pos, false);
             }
 
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
 
         // Damage -> Redstone Torch
 
-        if (!player.abilities.isCreativeMode && itemstack.getDamage() >= costDamage) {
+        if (!player.playerAbilities.isCreativeMode && itemstack.getDamage() >= costDamage) {
             // This is too damaged to place Redstone Torch
-            return EnumActionResult.FAIL;
+            return ActionResultType.FAIL;
         }
 
-        if (Blocks.REDSTONE_TORCH.asItem().onItemUse(context) == EnumActionResult.SUCCESS) {
+        if (Blocks.REDSTONE_TORCH.asItem().onItemUse(context) == ActionResultType.SUCCESS) {
             itemstack.setCount(1);
-            itemstack.damageItem(costDamage, player);
-            return EnumActionResult.SUCCESS;
+            itemstack.func_222118_a(costDamage, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
+            return ActionResultType.SUCCESS;
         }
 
-        return EnumActionResult.FAIL;
+        return ActionResultType.FAIL;
     }
 
     @Override
@@ -89,16 +89,16 @@ public class ItemLasarBlade extends ItemSword {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-        if (slot == EntityEquipmentSlot.MAINHAND) {
+        if (slot == EquipmentSlotType.MAINHAND) {
             multimap.removeAll(SharedMonsterAttributes.ATTACK_DAMAGE.getName());
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", attackDamage, 0));
+                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
             multimap.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", attackSpeed, 0));
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", attackSpeed, AttributeModifier.Operation.ADDITION));
         }
 
         return multimap;

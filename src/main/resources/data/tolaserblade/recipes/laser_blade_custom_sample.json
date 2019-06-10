@@ -21,6 +21,6 @@
   },
   "result": {
     "item": "tolaserblade:laser_blade",
-    "nbt": "{display:{Lore:[\"This is a sample\",\"of Laser Blade\",\"custom recipe\"]},colorC:-11763815,colorH:-13415246,Enchantments:[{id:sharpness,lvl:9s},{id:unbreaking,lvl:3s},{id:smite,lvl:10s},{id:looting,lvl:3s},{id:mending,lvl:1s}]}"
+    "nbt": "{display:{Lore:[\"\\\"This is a sample\\\"\",\"\\\"of Laser Blade\\\"\",\"\\\"custom recipe\\\"\"]},colorC:-11763815,colorH:-13415246,Enchantments:[{id:sharpness,lvl:9s},{id:unbreaking,lvl:3s},{id:smite,lvl:10s},{id:looting,lvl:3s},{id:mending,lvl:1s}]}"
   }
 }

@@ -3,7 +3,7 @@ package com.github.iunius118.tolaserblade.client.model;
 import com.github.iunius118.tolaserblade.ToLaserBladeConfig;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -11,10 +11,11 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.BasicState;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.client.model.obj.OBJModel.OBJBakedModel;
@@ -27,29 +28,29 @@ import javax.vecmath.Matrix4f;
 import java.util.*;
 
 @SuppressWarnings("deprecation") // for ItemCameraTransforms
-public class ModelLaserBlade implements IBakedModel {
+public class LaserBladeModel implements IBakedModel {
 
     public IBakedModel bakedOBJModel;
     public IBakedModel bakedJSONModel;
 
     public ItemStack itemStack;
     public World world;
-    public EntityLivingBase entity;
+    public LivingEntity entity;
 
     public TransformType cameraTransformType = TransformType.NONE;
 
-    public IBlockState state;
-    public EnumFacing side;
+    public BlockState state;
+    public Direction side;
     public Random rand;
 
     public Map<String, List<BakedQuad>> mapQuads = new HashMap<String, List<BakedQuad>>();
     public String[] partNames = {"Hilt", "Hilt_bright", "Blade_core", "Blade_halo_1", "Blade_halo_2"};
 
-    public ModelLaserBlade(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn) {
+    public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn) {
         this(bakedOBJModelIn, bakedJSONModelIn, false);
     }
 
-    public ModelLaserBlade(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn, boolean isInitialized) {
+    public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn, boolean isInitialized) {
         bakedOBJModel = bakedOBJModelIn;
         bakedJSONModel = bakedJSONModelIn;
 
@@ -91,7 +92,7 @@ public class ModelLaserBlade implements IBakedModel {
                 };
 
                 // Bake model of visible groups.
-                IBakedModel bakedModel = obj.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), modelState, false, DefaultVertexFormats.ITEM);
+                IBakedModel bakedModel = obj.bake(null, ModelLoader.defaultTextureGetter(), new BasicState(modelState, false), DefaultVertexFormats.ITEM);
 
                 quads = bakedModel.getQuads(null, null, null);
             } catch (Exception e) {
@@ -102,17 +103,17 @@ public class ModelLaserBlade implements IBakedModel {
         return quads;
     }
 
-    public void handleItemState(ItemStack itemStackIn, World worldIn, EntityLivingBase entityLivingBaseIn) {
+    public void handleItemState(ItemStack itemStackIn, World worldIn, LivingEntity entityLivingBaseIn) {
         itemStack = itemStackIn;
         world = worldIn;
         entity = entityLivingBaseIn;
     }
 
     @Override
-    public List<BakedQuad> getQuads(IBlockState blockStateIn, EnumFacing enumFacingIn, Random randIn) {
-        if (enumFacingIn == null) {
+    public List<BakedQuad> getQuads(BlockState blockStateIn, Direction direction, Random randIn) {
+        if (side == null) {
             state = blockStateIn;
-            side = enumFacingIn;
+            side = direction;
             rand = randIn;
 
             return bakedOBJModel.getQuads(null, null, randIn);
@@ -159,10 +160,10 @@ public class ModelLaserBlade implements IBakedModel {
         return new ItemOverrideList() {
 
             @Override
-            public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-                // Copy ModelLaserBlade object and handle ItemStack.
-                if (originalModel instanceof ModelLaserBlade) {
-                    ModelLaserBlade model = (ModelLaserBlade) originalModel;
+            public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, World world, LivingEntity entity) {
+                // Copy LaserBladeModel object and handle ItemStack.
+                if (originalModel instanceof LaserBladeModel) {
+                    LaserBladeModel model = (LaserBladeModel) originalModel;
                     model.handleItemState(stack, world, entity);
                     return model;
                 }

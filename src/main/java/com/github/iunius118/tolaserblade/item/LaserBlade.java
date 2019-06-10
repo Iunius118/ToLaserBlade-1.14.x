@@ -4,17 +4,17 @@ import com.github.iunius118.tolaserblade.ToLaserBlade;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.StainedGlassBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.NetherBiome;
@@ -93,7 +93,7 @@ public class LaserBlade {
 
         damage = itemStack.getDamage();
 
-        NBTTagCompound nbt = stack.getOrCreateTag();
+        CompoundNBT nbt = stack.getOrCreateTag();
 
         if (isLaserBladeStack) {
             setAttack(nbt.getFloat(KEY_ATK));
@@ -114,7 +114,7 @@ public class LaserBlade {
         mapEnch.remove(Enchantments.UNBREAKING);
 
         // Fix speed for old version
-        if (isLaserBladeStack && !nbt.hasKey(KEY_SPD)) {
+        if (isLaserBladeStack && !nbt.contains(KEY_SPD)) {
             int smite = mapEnch.getOrDefault(Enchantments.SMITE, 0);
 
             if (smite < LVL_SMITE_CLASS_1) {
@@ -125,8 +125,8 @@ public class LaserBlade {
                 speed = MOD_SPD_CLASS_3;
             }
 
-            nbt.setFloat(KEY_ATK, attack);
-            nbt.setFloat(KEY_SPD, speed);
+            nbt.putFloat(KEY_ATK, attack);
+            nbt.putFloat(KEY_SPD, speed);
 
             // Set default colors if they not set
             getCoreColor();
@@ -145,20 +145,20 @@ public class LaserBlade {
     }
 
     public LaserBlade setCraftingTag() {
-        NBTTagCompound nbt = stack.getTag();
-        nbt.setBoolean(KEY_IS_CRAFTING, true);
+        CompoundNBT nbt = stack.getTag();
+        nbt.putBoolean(KEY_IS_CRAFTING, true);
         return this;
     }
 
     public LaserBlade removeCraftingTag() {
-        NBTTagCompound nbt = stack.getTag();
-        nbt.removeTag(KEY_IS_CRAFTING);
+        CompoundNBT nbt = stack.getTag();
+        nbt.remove(KEY_IS_CRAFTING);
         return this;
     }
 
     public boolean hasCraftingTag() {
-        NBTTagCompound nbt = stack.getTag();
-        return nbt.hasKey(KEY_IS_CRAFTING);
+        CompoundNBT nbt = stack.getTag();
+        return nbt.contains(KEY_IS_CRAFTING);
     }
 
     private float getAttackFromSharpness(Integer level) {
@@ -190,46 +190,46 @@ public class LaserBlade {
     }
 
     public int getCoreColor() {
-        NBTTagCompound nbt = stack.getTag();
+        CompoundNBT nbt = stack.getTag();
 
         if (nbt.contains(KEY_COLOR_CORE, NBT.TAG_INT)) {
             return nbt.getInt(KEY_COLOR_CORE);
         }
 
-        nbt.setInt(KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
+        nbt.putInt(KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
         return DEFAULT_COLOR_CORE;
     }
 
     public boolean isCoreSubColor() {
-        NBTTagCompound nbt = stack.getTag();
+        CompoundNBT nbt = stack.getTag();
 
         if (nbt.contains(KEY_IS_SUB_COLOR_CORE, NBT.TAG_BYTE)) {
             return nbt.getBoolean(KEY_IS_SUB_COLOR_CORE);
         }
 
-        nbt.setBoolean(KEY_IS_SUB_COLOR_CORE, false);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_CORE, false);
         return false;
     }
 
     public int getHaloColor() {
-        NBTTagCompound nbt = stack.getTag();
+        CompoundNBT nbt = stack.getTag();
 
         if (nbt.contains(KEY_COLOR_HALO, NBT.TAG_INT)) {
             return nbt.getInt(KEY_COLOR_HALO);
         }
 
-        nbt.setInt(KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
+        nbt.putInt(KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
         return DEFAULT_COLOR_HALO;
     }
 
     public boolean isHaloSubColor() {
-        NBTTagCompound nbt = stack.getTag();
+        CompoundNBT nbt = stack.getTag();
 
         if (nbt.contains(KEY_IS_SUB_COLOR_HALO, NBT.TAG_BYTE)) {
             return nbt.getBoolean(KEY_IS_SUB_COLOR_HALO);
         }
 
-        nbt.setBoolean(KEY_IS_SUB_COLOR_HALO, false);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_HALO, false);
         return false;
     }
 
@@ -254,10 +254,10 @@ public class LaserBlade {
             return saveTagsToItemStack(stack);
         }
 
-        NBTTagCompound nbt = stack.getTag();
+        CompoundNBT nbt = stack.getTag();
 
-        nbt.setFloat(KEY_ATK, attack);
-        nbt.setFloat(KEY_SPD, speed);
+        nbt.putFloat(KEY_ATK, attack);
+        nbt.putFloat(KEY_SPD, speed);
         EnchantmentHelper.setEnchantments(mapEnch, stack);
 
         stack.setDamage(damage);
@@ -270,53 +270,53 @@ public class LaserBlade {
     }
 
     public LaserBlade setDefaultColors() {
-        NBTTagCompound nbt = stack.getOrCreateTag();;
-        nbt.setInt(KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
-        nbt.setInt(KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
-        nbt.setBoolean(KEY_IS_SUB_COLOR_CORE, false);
-        nbt.setBoolean(KEY_IS_SUB_COLOR_HALO, false);
+        CompoundNBT nbt = stack.getOrCreateTag();;
+        nbt.putInt(KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
+        nbt.putInt(KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_CORE, false);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_HALO, false);
         return this;
     }
 
     public LaserBlade setCoreColor(int color) {
-        NBTTagCompound nbt = stack.getTag();
-        nbt.setInt(KEY_COLOR_CORE, color);
+        CompoundNBT nbt = stack.getTag();
+        nbt.putInt(KEY_COLOR_CORE, color);
         return this;
     }
 
     public LaserBlade setCoreSubColor(boolean isSubColor) {
-        NBTTagCompound nbt = stack.getTag();
-        nbt.setBoolean(KEY_IS_SUB_COLOR_CORE, isSubColor);
+        CompoundNBT nbt = stack.getTag();
+        nbt.putBoolean(KEY_IS_SUB_COLOR_CORE, isSubColor);
         return this;
     }
 
     public LaserBlade flipCoreSubColor() {
-        NBTTagCompound nbt = stack.getOrCreateTag();
+        CompoundNBT nbt = stack.getOrCreateTag();
         boolean b = nbt.getBoolean(KEY_IS_SUB_COLOR_CORE);
-        nbt.setBoolean(KEY_IS_SUB_COLOR_CORE, !b);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_CORE, !b);
         return this;
     }
 
     public LaserBlade setHaloColor(int color) {
-        NBTTagCompound nbt = stack.getOrCreateTag();
-        nbt.setInt(KEY_COLOR_HALO, color);
+        CompoundNBT nbt = stack.getOrCreateTag();
+        nbt.putInt(KEY_COLOR_HALO, color);
         return this;
     }
 
     public LaserBlade setHaloSubColor(boolean isSubColor) {
-        NBTTagCompound nbt = stack.getOrCreateTag();
-        nbt.setBoolean(KEY_IS_SUB_COLOR_HALO, isSubColor);
+        CompoundNBT nbt = stack.getOrCreateTag();
+        nbt.putBoolean(KEY_IS_SUB_COLOR_HALO, isSubColor);
         return this;
     }
 
     public LaserBlade flipHaloSubColor() {
-        NBTTagCompound nbt = stack.getOrCreateTag();
+        CompoundNBT nbt = stack.getOrCreateTag();
         boolean b = nbt.getBoolean(KEY_IS_SUB_COLOR_HALO);
-        nbt.setBoolean(KEY_IS_SUB_COLOR_HALO, !b);
+        nbt.putBoolean(KEY_IS_SUB_COLOR_HALO, !b);
         return this;
     }
 
-    public LaserBlade changeColorsByBiome(EntityPlayer player) {
+    public LaserBlade changeColorsByBiome(PlayerEntity player) {
         World world = player.world;
         Biome biome = world.getBiome(player.getPosition());
 
@@ -365,18 +365,18 @@ public class LaserBlade {
     public LaserBlade changeColorByItem(ItemStack stack) {
         Item item = stack.getItem();
 
-        if (item instanceof ItemDye) {
-            int color = ((ItemDye) stack.getItem()).getDyeColor().getMapColor().colorValue | 0xFF000000;
+        if (item instanceof DyeItem) {
+            int color = ((DyeItem) stack.getItem()).getDyeColor().getMapColor().colorValue | 0xFF000000;
 
             if (getCoreColor() != color) {
                 setCoreColor(color);
                 cost++;
             }
-        } else if (item instanceof ItemBlock) {
-            Block block = ((ItemBlock) item).getBlock();
+        } else if (item instanceof BlockItem) {
+            Block block = ((BlockItem) item).getBlock();
 
-            if (block instanceof BlockStainedGlass) {
-                int color = ((BlockStainedGlass) block).getColor().getMapColor().colorValue | 0xFF000000;
+            if (block instanceof StainedGlassBlock) {
+                int color = ((StainedGlassBlock) block).getColor().getMapColor().colorValue | 0xFF000000;
 
                 if (getHaloColor() != color) {
                     setHaloColor(color);
@@ -397,7 +397,7 @@ public class LaserBlade {
             }
         } else {
             if (!name.equals(stack.getDisplayName().getString())) {
-                stack.setDisplayName(new TextComponentString(name));
+                stack.setDisplayName(new StringTextComponent(name));
                 cost += 1;
             }
         }
@@ -525,11 +525,11 @@ public class LaserBlade {
      * @return Saved Laser Blade stack
      */
     public ItemStack saveTagsToLaserBlade(ItemStack itemStack) {
-        NBTTagCompound newNBT = itemStack.getOrCreateTag();
-        NBTTagCompound oldNBT = stack.getTag();
+        CompoundNBT newNBT = itemStack.getOrCreateTag();
+        CompoundNBT oldNBT = stack.getTag();
 
-        newNBT.setFloat(KEY_ATK, attack);
-        newNBT.setFloat(KEY_SPD, speed);
+        newNBT.putFloat(KEY_ATK, attack);
+        newNBT.putFloat(KEY_SPD, speed);
         copyNBTInt(newNBT, oldNBT, KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
         copyNBTInt(newNBT, oldNBT, KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
         copyNBTBoolean(newNBT, oldNBT, KEY_IS_SUB_COLOR_CORE, false);
@@ -549,8 +549,8 @@ public class LaserBlade {
      * @return Saved input stack
      */
     public ItemStack saveTagsToItemStack(ItemStack itemStack) {
-        NBTTagCompound newNBT = itemStack.getOrCreateTag();
-        NBTTagCompound oldNBT = stack.getTag();
+        CompoundNBT newNBT = itemStack.getOrCreateTag();
+        CompoundNBT oldNBT = stack.getTag();
 
         copyNBTInt(newNBT, oldNBT, KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
         copyNBTInt(newNBT, oldNBT, KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
@@ -566,19 +566,19 @@ public class LaserBlade {
         return itemStack;
     }
 
-    private void copyNBTInt(NBTTagCompound newNBT, NBTTagCompound oldNBT, String key, int defaultValue) {
+    private void copyNBTInt(CompoundNBT newNBT, CompoundNBT oldNBT, String key, int defaultValue) {
         if (oldNBT.contains(key, NBT.TAG_INT)) {
-            newNBT.setInt(key, oldNBT.getInt(key));
+            newNBT.putInt(key, oldNBT.getInt(key));
         } else {
-            newNBT.setInt(key, defaultValue);
+            newNBT.putInt(key, defaultValue);
         }
     }
 
-    private void copyNBTBoolean(NBTTagCompound newNBT, NBTTagCompound oldNBT, String key, boolean defaultValue) {
-        if (oldNBT.hasKey(key)) {
-            newNBT.setBoolean(key, oldNBT.getBoolean(key));
+    private void copyNBTBoolean(CompoundNBT newNBT, CompoundNBT oldNBT, String key, boolean defaultValue) {
+        if (oldNBT.contains(key)) {
+            newNBT.putBoolean(key, oldNBT.getBoolean(key));
         } else {
-            newNBT.setBoolean(key, defaultValue);
+            newNBT.putBoolean(key, defaultValue);
         }
     }
 

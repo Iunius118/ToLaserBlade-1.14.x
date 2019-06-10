@@ -2,20 +2,17 @@ package com.github.iunius118.tolaserblade;
 
 import com.github.iunius118.tolaserblade.client.ClientEventHandler;
 import com.github.iunius118.tolaserblade.item.ItemEventHandler;
-import com.github.iunius118.tolaserblade.item.ItemLasarBlade;
-import com.github.iunius118.tolaserblade.item.ItemLaserBlade;
+import com.github.iunius118.tolaserblade.item.LasarBladeItem;
+import com.github.iunius118.tolaserblade.item.LaserBladeItem;
 import com.github.iunius118.tolaserblade.item.crafting.*;
 import com.github.iunius118.tolaserblade.network.NetworkHandler;
 import com.github.iunius118.tolaserblade.network.ServerConfigMessage;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,13 +54,6 @@ public class ToLaserBlade {
     public static final String NAME_ITEM_LASER_BLADE_CORE = "laser_blade_core";
 
     public static boolean hasShownUpdate = false;
-
-    // Recipe Serializers
-    public static final IRecipeSerializer<ShapelessRecipe> CRAFTING_LASER_BLADE_DYEING = RecipeSerializers.register(new RecipeLaserBladeDyeing.Serializer());
-    public static final IRecipeSerializer<ShapedRecipe> CRAFTING_LASER_BLADE_CLASS_1 = RecipeSerializers.register(new RecipeLaserBladeClass1.Serializer());
-    public static final IRecipeSerializer<ShapedRecipe> CRAFTING_LASER_BLADE_CLASS_2 = RecipeSerializers.register(new RecipeLaserBladeClass2.Serializer());
-    public static final IRecipeSerializer<ShapedRecipe> CRAFTING_LASER_BLADE_CLASS_3 = RecipeSerializers.register(new RecipeLaserBladeClass3.Serializer());
-    public static final IRecipeSerializer<ShapedRecipe> CRAFTING_LASER_BLADE_CUSTOM = RecipeSerializers.register(new RecipeLaserBladeCustom.Serializer());
 
     // Init network channels
     public static final NetworkHandler NETWORK_HANDLER = new NetworkHandler();
@@ -110,6 +100,15 @@ public class ToLaserBlade {
         public static final Item LASER_BLADE_CORE = null;
     }
 
+    @ObjectHolder(MOD_ID)
+    public static class RecipeSerializers {
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_DYEING = null;
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_1 = null;
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_2 = null;
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_3 = null;
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CUSTOM = null;
+    }
+
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
@@ -119,9 +118,20 @@ public class ToLaserBlade {
             }
 
             event.getRegistry().registerAll(
-                    new ItemLasarBlade().setRegistryName(NAME_ITEM_LASAR_BLADE),
-                    new ItemLaserBlade().setRegistryName(NAME_ITEM_LASER_BLADE),
+                    new LasarBladeItem().setRegistryName(NAME_ITEM_LASAR_BLADE),
+                    new LaserBladeItem().setRegistryName(NAME_ITEM_LASER_BLADE),
                     new Item((new Item.Properties()).group(ItemGroup.MATERIALS)).setRegistryName(NAME_ITEM_LASER_BLADE_CORE)
+            );
+        }
+
+        @SubscribeEvent
+        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+            event.getRegistry().registerAll(
+                    new LaserBladeDyeingRecipe.Serializer().setRegistryName(LaserBladeDyeingRecipe.Serializer.NAME),
+                    new LaserBladeClass1Recipe.Serializer().setRegistryName(LaserBladeClass1Recipe.Serializer.NAME),
+                    new LaserBladeClass2Recipe.Serializer().setRegistryName(LaserBladeClass2Recipe.Serializer.NAME),
+                    new LaserBladeClass3Recipe.Serializer().setRegistryName(LaserBladeClass3Recipe.Serializer.NAME),
+                    new LaserBladeCustomRecipe.Serializer().setRegistryName(LaserBladeCustomRecipe.Serializer.NAME)
             );
         }
     }
@@ -149,13 +159,13 @@ public class ToLaserBlade {
 
         NETWORK_HANDLER.getConfigChannel().sendTo(
                 new ServerConfigMessage(serverConfig),
-                ((EntityPlayerMP) event.getPlayer()).connection.getNetworkManager(),
+                ((ServerPlayerEntity) event.getPlayer()).connection.getNetworkManager(),
                 NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @SubscribeEvent
     public void onEntityJoiningInWorld(final EntityJoinWorldEvent event) {
-        if (event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer) {
+        if (event.getWorld().isRemote && event.getEntity() instanceof PlayerEntity) {
             if (!hasShownUpdate) {
                 ClientEventHandler.checkUpdate();
                 hasShownUpdate = true;
@@ -170,7 +180,7 @@ public class ToLaserBlade {
         String str = event.getSource().getDamageType() + " caused " + event.getAmount() + " point damage to " + event.getEntityLiving().getName().getFormattedText() + "!";
 
         if (FMLLoader.getDist().isClient()) {
-            Minecraft.getInstance().ingameGUI.addChatMessage(ChatType.SYSTEM, new TextComponentString(str));
+            Minecraft.getInstance().ingameGUI.addChatMessage(ChatType.SYSTEM, new StringTextComponent(str));
         } else {
             LOGGER.info(str);
         }

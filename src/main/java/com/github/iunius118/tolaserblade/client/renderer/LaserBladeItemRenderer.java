@@ -2,18 +2,23 @@ package com.github.iunius118.tolaserblade.client.renderer;
 
 import com.github.iunius118.tolaserblade.ToLaserBlade;
 import com.github.iunius118.tolaserblade.ToLaserBladeConfig;
-import com.github.iunius118.tolaserblade.client.model.ModelLaserBlade;
+import com.github.iunius118.tolaserblade.client.model.LaserBladeModel;
 import com.github.iunius118.tolaserblade.item.LaserBlade;
+import com.mojang.blaze3d.platform.GLX;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,19 +35,19 @@ import java.util.Map;
 
 @SuppressWarnings("deprecation") // for ItemCameraTransforms
 @OnlyIn(Dist.CLIENT)
-public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
+public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
     @Override
     public void renderByItem(ItemStack itemStackIn) {
         Minecraft mc = Minecraft.getInstance();
         IBakedModel model = mc.getItemRenderer().getItemModelMesher().getModelManager().getModel(ToLaserBlade.MRL_ITEM_LASER_BLADE);
 
-        if (model instanceof ModelLaserBlade) {
-            ModelLaserBlade modelLaserBlade = (ModelLaserBlade) model;
-            doRender(modelLaserBlade);
+        if (model instanceof LaserBladeModel) {
+            LaserBladeModel laserBladeModel = (LaserBladeModel) model;
+            doRender(laserBladeModel);
         }
     }
 
-    public void doRender(ModelLaserBlade model) {
+    public void doRender(LaserBladeModel model) {
         BufferBuilder renderer = Tessellator.getInstance().getBuffer();
         LaserBlade laserBlade = LaserBlade.create(model.itemStack);
         int colorCore = laserBlade.getCoreColor();
@@ -73,9 +78,9 @@ public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
         // Enable bright rendering.
         GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
         RenderHelper.disableStandardItemLighting();
-        float lastBrightnessX = OpenGlHelper.lastBrightnessX;
-        float lastBrightnessY = OpenGlHelper.lastBrightnessY;
-        OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, 240.0F, 240.0F);
+        float lastBrightnessX = GLX.lastBrightnessX;
+        float lastBrightnessY = GLX.lastBrightnessY;
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240.0F, 240.0F);
 
         // Draw bright part of hilt.
         renderQuads(renderer, model.getQuadsByName("Hilt_bright"), -1);
@@ -131,7 +136,7 @@ public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
         }
 
         // Disable bright rendering.
-        OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, lastBrightnessX, lastBrightnessY);
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, lastBrightnessX, lastBrightnessY);
         RenderHelper.enableStandardItemLighting();
         GL11.glPopAttrib();
 
@@ -183,7 +188,7 @@ public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
         float[] matrix;
 
         if (isBlocking) {
-            if (Minecraft.getInstance().gameSettings.mainHand == EnumHandSide.RIGHT) {
+            if (Minecraft.getInstance().gameSettings.field_186715_A == HandSide.RIGHT) {  // field_186715_A = mainHand
                 matrix = transformMatricesBlockingRight.get(cameraTransformType);
             } else {
                 matrix = transformMatricesBlockingLeft.get(cameraTransformType);
@@ -242,7 +247,7 @@ public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
 		// */
 
         matrixBuf.flip();
-        GlStateManager.multMatrixf(matrixBuf);
+        GlStateManager.multMatrix(matrixBuf);
     }
 
     public void renderEffect(List<BakedQuad> quads) {
@@ -278,7 +283,7 @@ public class ItemLaserBladeRenderer extends TileEntityItemStackRenderer {
         GlStateManager.enableLighting();
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
         GlStateManager.depthMask(true);
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
     }
 
     public void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color) {

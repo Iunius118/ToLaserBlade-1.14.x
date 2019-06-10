@@ -3,28 +3,25 @@ package com.github.iunius118.tolaserblade.item;
 import com.github.iunius118.tolaserblade.ToLaserBlade;
 import com.github.iunius118.tolaserblade.ToLaserBladeConfig;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAbstractSkull;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,7 +36,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 import javax.annotation.Nullable;
 
-public class ItemLaserBlade extends ItemSword {
+public class LaserBladeItem extends SwordItem {
     private final IItemTier tier;
     private final float attackDamage;
     private final float attackSpeed;
@@ -49,8 +46,8 @@ public class ItemLaserBlade extends ItemSword {
         return entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F;
     };
 
-    public ItemLaserBlade() {
-        super(new ItemTierLaser(), 3, -1.2F, properties);
+    public LaserBladeItem() {
+        super(new LaserItemTier(), 3, -1.2F, properties);
 
         tier = getTier();
         attackDamage = 3.0F + tier.getAttackDamage();
@@ -66,7 +63,7 @@ public class ItemLaserBlade extends ItemSword {
         LaserBlade laserBlade = LaserBlade.create(event.getEntityPlayer().getHeldItemMainhand());
 
         if (event.isVanillaCritical()) {
-            if (target instanceof EntityWither || laserBlade.getAttack() > LaserBlade.MOD_ATK_CLASS_4) {
+            if (target instanceof WitherEntity || laserBlade.getAttack() > LaserBlade.MOD_ATK_CLASS_4) {
                 event.setDamageModifier(LaserBlade.MOD_CRITICAL_VS_WITHER);
             }
         }
@@ -105,8 +102,8 @@ public class ItemLaserBlade extends ItemSword {
             // EXTRACT CORE
             // Consume Iron Axe damage
             ItemStack ironAxe = right.copy();
-            EntityPlayer player = event.getEntityPlayer();
-            ironAxe.damageItem(10, player);
+            PlayerEntity player = event.getEntityPlayer();
+            ironAxe.func_222118_a(1, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
             player.addItemStackToInventory(ironAxe);
         }
     }
@@ -257,7 +254,7 @@ public class ItemLaserBlade extends ItemSword {
 
             return;
 
-        } else if (getBlockFromItem(itemRight) instanceof BlockAbstractSkull) {
+        } else if (getBlockFromItem(itemRight) instanceof AbstractSkullBlock) {
             // MORE ATTACK++
             if (laserBlade.getAttack() < LaserBlade.MOD_ATK_CLASS_3) {
                 return;
@@ -318,8 +315,8 @@ public class ItemLaserBlade extends ItemSword {
 
     @Nullable
     private Block getBlockFromItem(Item item) {
-        if (item instanceof ItemBlock) {
-            return ((ItemBlock) item).getBlock();
+        if (item instanceof BlockItem) {
+            return ((BlockItem) item).getBlock();
         }
 
         return null;
@@ -332,12 +329,12 @@ public class ItemLaserBlade extends ItemSword {
     public String getSkullOwnerName(ItemStack stack) {
         if (stack.getItem() == Items.PLAYER_HEAD && stack.hasTag()) {
             String name = "";
-            NBTTagCompound tag = stack.getTag();
+            CompoundNBT tag = stack.getTag();
 
             if (tag.contains("SkullOwner", NBT.TAG_STRING)) {
                 name = tag.getString("SkullOwner");
             } else if (tag.contains("SkullOwner", NBT.TAG_COMPOUND)) {
-                NBTTagCompound tagOwner = tag.getCompound("SkullOwner");
+                CompoundNBT tagOwner = tag.getCompound("SkullOwner");
 
                 if (tagOwner.contains("Name", NBT.TAG_STRING)) {
                     name = tagOwner.getString("Name");
@@ -355,16 +352,16 @@ public class ItemLaserBlade extends ItemSword {
     /* Shield function */
 
     @Override
-    public boolean isShield(ItemStack stack, @Nullable EntityLivingBase entity) {
+    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
         return ToLaserBladeConfig.COMMON.isEnabledBlockingWithLaserBladeInServer.get();
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack stack) {
+    public UseAction getUseAction(ItemStack stack) {
         if (ToLaserBladeConfig.COMMON.isEnabledBlockingWithLaserBladeInServer.get()) {
-            return EnumAction.BLOCK;
+            return UseAction.BLOCK;
         } else {
-            return EnumAction.NONE;
+            return UseAction.NONE;
         }
     }
 
@@ -378,19 +375,19 @@ public class ItemLaserBlade extends ItemSword {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
 
         if (ToLaserBladeConfig.COMMON.isEnabledBlockingWithLaserBladeInServer.get()) {
-            EnumAction offhandItemAction = playerIn.getHeldItemOffhand().getUseAction();
+            UseAction offhandItemAction = playerIn.getHeldItemOffhand().getUseAction();
 
-            if (offhandItemAction != EnumAction.BOW && offhandItemAction != EnumAction.SPEAR) {
+            if (offhandItemAction != UseAction.BOW && offhandItemAction != UseAction.SPEAR) {
                 playerIn.setActiveHand(handIn);
             }
 
-            return new ActionResult<>(EnumActionResult.PASS, itemstack);
+            return new ActionResult<>(ActionResultType.PASS, itemstack);
         } else {
-            return new ActionResult<>(EnumActionResult.PASS, itemstack);
+            return new ActionResult<>(ActionResultType.PASS, itemstack);
         }
     }
 
@@ -402,32 +399,32 @@ public class ItemLaserBlade extends ItemSword {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (state.getBlockHardness(worldIn, pos) != 0.0F) {
-            stack.damageItem(1, entityLiving);
+            stack.func_222118_a(1, entityLiving, (playerEntity) -> playerEntity.func_213361_c(EquipmentSlotType.MAINHAND));  // func_222118_a = damageItem ?
         }
 
         return true;
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-        stack.damageItem(1, attacker);
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        stack.func_222118_a(1, attacker, (playerEntity) -> playerEntity.func_213361_c(EquipmentSlotType.MAINHAND));  // func_222118_a = damageItem ?
         return true;
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
         return tier.getEfficiency();
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState blockIn) {
+    public boolean canHarvestBlock(BlockState blockIn) {
         return true;
     }
 
     @Override
-    public int getHarvestLevel(ItemStack stack, ToolType tool, EntityPlayer player, IBlockState blockState) {
+    public int getHarvestLevel(ItemStack stack, ToolType tool, PlayerEntity player, BlockState blockState) {
         return tier.getHarvestLevel();
     }
 
@@ -452,18 +449,18 @@ public class ItemLaserBlade extends ItemSword {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
-        if (slot == EntityEquipmentSlot.MAINHAND) {
+        if (slot == EquipmentSlotType.MAINHAND) {
             LaserBlade laserBlade = LaserBlade.create(stack);
 
             multimap.removeAll(SharedMonsterAttributes.ATTACK_DAMAGE.getName());
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", attackDamage + laserBlade.getAttack(), 0));
+                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", attackDamage + laserBlade.getAttack(), AttributeModifier.Operation.ADDITION));
             multimap.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", attackSpeed + laserBlade.getSpeed(), 0));
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", attackSpeed + laserBlade.getSpeed(), AttributeModifier.Operation.ADDITION));
         }
 
         return multimap;
@@ -490,7 +487,7 @@ public class ItemLaserBlade extends ItemSword {
         }
 
         private int getColorFromNBT(ItemStack stack, String keyColor, String keyIsSubColor, int defaultColor) {
-            NBTTagCompound nbt = stack.getTag();
+            CompoundNBT nbt = stack.getTag();
 
             if (nbt != null && nbt.contains(keyColor, NBT.TAG_INT)) {
                 int color = nbt.getInt(keyColor);
