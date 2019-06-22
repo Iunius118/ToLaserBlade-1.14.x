@@ -43,11 +43,16 @@ public class LaserBladeModel implements IBakedModel {
     public Direction side;
     public Random rand;
 
-    public Map<String, List<BakedQuad>> mapQuads = new HashMap<String, List<BakedQuad>>();
+    public Map<String, List<BakedQuad>> mapQuads_0 = new HashMap<String, List<BakedQuad>>();
+    public Map<String, List<BakedQuad>> mapQuads_1 = new HashMap<String, List<BakedQuad>>();
     public String[] partNames = {"Hilt", "Hilt_bright", "Blade_core", "Blade_halo_1", "Blade_halo_2"};
 
     public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn) {
         this(bakedOBJModelIn, bakedJSONModelIn, false);
+    }
+
+    public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedOBJModelSubIn, IBakedModel bakedJSONModelIn) {
+        this(bakedOBJModelIn, bakedOBJModelSubIn, bakedJSONModelIn, false);
     }
 
     public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn, boolean isInitialized) {
@@ -57,12 +62,25 @@ public class LaserBladeModel implements IBakedModel {
         if (!isInitialized) {
             // Separate Quads to each parts by OBJ Group.
             for (String partName : partNames) {
-                mapQuads.put(partName, getPartQuads(bakedOBJModelIn, ImmutableList.of(partName)));
+                mapQuads_0.put(partName, getQuadsByGroups(bakedOBJModelIn, ImmutableList.of(partName)));
+                mapQuads_1 = mapQuads_0;
             }
         }
     }
 
-    public List<BakedQuad> getPartQuads(IBakedModel bakedModelIn, final List<String> visibleGroups) {
+    public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedOBJModelSubIn, IBakedModel bakedJSONModelIn, boolean isInitialized) {
+        bakedJSONModel = bakedJSONModelIn;
+
+        if (!isInitialized) {
+            // Separate Quads to each parts by OBJ Group.
+            for (String partName : partNames) {
+                mapQuads_0.put(partName, getQuadsByGroups(bakedOBJModelIn, ImmutableList.of(partName)));
+                mapQuads_1.put(partName, getQuadsByGroups(bakedOBJModelSubIn, ImmutableList.of(partName)));
+            }
+        }
+    }
+
+    public List<BakedQuad> getQuadsByGroups(IBakedModel bakedModelIn, final List<String> visibleGroups) {
         List<BakedQuad> quads = Collections.emptyList();
 
         if (bakedModelIn instanceof OBJBakedModel) {
@@ -123,11 +141,15 @@ public class LaserBladeModel implements IBakedModel {
     }
 
     public List<BakedQuad> getQuadsByName(String name) {
-        if (mapQuads.containsKey(name)) {
-            return mapQuads.get(name);
+        Map<String, List<BakedQuad>> mapQuads;
+
+        if (ToLaserBladeConfig.CLIENT.laserBladeRenderingMode.get() == 1) {
+            mapQuads = mapQuads_1;
+        } else {
+            mapQuads = mapQuads_0;
         }
 
-        return Collections.emptyList();
+        return mapQuads.getOrDefault(name, Collections.emptyList());
     }
 
     @Override

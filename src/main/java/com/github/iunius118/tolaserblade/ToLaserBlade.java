@@ -49,7 +49,6 @@ public class ToLaserBlade {
     public static final ModelResourceLocation MRL_ITEM_LASER_BLADE = new ModelResourceLocation(MOD_ID + ":" + NAME_ITEM_LASER_BLADE, "inventory");
     public static final ResourceLocation RL_OBJ_ITEM_LASER_BLADE = new ResourceLocation(MOD_ID, "item/laser_blade.obj");
     public static final ResourceLocation RL_OBJ_ITEM_LASER_BLADE_1 = new ResourceLocation(MOD_ID, "item/laser_blade_1.obj");
-    public static final ResourceLocation RL_TEXTURE_ITEM_LASER_BLADE = new ResourceLocation(MOD_ID, "item/laser_blade");
 
     public static final String NAME_ITEM_LASER_BLADE_CORE = "laser_blade_core";
 

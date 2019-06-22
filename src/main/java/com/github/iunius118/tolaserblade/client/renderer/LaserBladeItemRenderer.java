@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,6 +37,8 @@ import java.util.Map;
 @SuppressWarnings("deprecation") // for ItemCameraTransforms
 @OnlyIn(Dist.CLIENT)
 public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
+    public static final ResourceLocation LASER_BLADE_TEXTURE_LOCATION = new ResourceLocation(ToLaserBlade.MOD_ID, "textures/item/laser_blade.png");
+
     @Override
     public void renderByItem(ItemStack itemStackIn) {
         Minecraft mc = Minecraft.getInstance();
@@ -57,32 +60,37 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
 
         TransformType cameraTransformType = model.cameraTransformType;
 
-        // Transform by Blocking.
+        // Transform by Blocking
         boolean isBlocking = ToLaserBladeConfig.COMMON.isEnabledBlockingWithLaserBladeInServer.get()
                 && (cameraTransformType == TransformType.FIRST_PERSON_RIGHT_HAND || cameraTransformType == TransformType.FIRST_PERSON_LEFT_HAND)
                 && model.entity != null && model.entity.isHandActive();
 
-        // Transform by Camera type.
+        // Transform by camera type
         transform(cameraTransformType, isBlocking);
 
-        // Enable Culling.
+        // Enable culling
         boolean isEnableCull = GL11.glIsEnabled(GL11.GL_CULL_FACE);
 
         if (!isEnableCull) {
             GlStateManager.enableCull();
         }
 
-        // Draw hilt.
+        // Start rendering LaserBlade
+
+        // Bind LaserBlade texture
+        Minecraft.getInstance().getTextureManager().bindTexture(LASER_BLADE_TEXTURE_LOCATION);
+
+        // Draw hilt
         renderQuads(renderer, model.getQuadsByName("Hilt"), -1);
 
-        // Enable bright rendering.
+        // Enable bright rendering
         GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
         RenderHelper.disableStandardItemLighting();
         float lastBrightnessX = GLX.lastBrightnessX;
         float lastBrightnessY = GLX.lastBrightnessY;
         GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240.0F, 240.0F);
 
-        // Draw bright part of hilt.
+        // Draw bright part of hilt
         renderQuads(renderer, model.getQuadsByName("Hilt_bright"), -1);
 
         if (ToLaserBladeConfig.CLIENT.laserBladeRenderingMode.get() == 1) {
@@ -96,7 +104,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
                 colorHalo = ~colorHalo | 0xFF000000;
             }
 
-            // Draw blade.
+            // Draw blade parts
             renderQuads(renderer, model.getQuadsByName("Blade_halo_2"), colorHalo);
             renderQuads(renderer, model.getQuadsByName("Blade_halo_1"), colorHalo);
             renderQuads(renderer, model.getQuadsByName("Blade_core"), colorCore);
@@ -104,21 +112,21 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
         } else {
             // Rendering Mode 0: Default
 
-            // Enable Add-color.
+            // Enable Add-color
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
             GL14.glBlendEquation(GL14.GL_FUNC_ADD);
 
-            // Draw blade core.
+            // Draw blade core
             if (isSubColorCore) {
-                // Draw core with Sub-color.
+                // Draw core with Sub-color
                 GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
             }
 
             renderQuads(renderer, model.getQuadsByName("Blade_core"), colorCore);
 
-            // Draw blade halo.
+            // Draw blade halo
             if (!isSubColorCore && isSubColorHalo) {
-                // Draw halo with Sub-color.
+                // Draw halo with Sub-color
                 GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
             } else if (isSubColorCore && !isSubColorHalo) {
                 GL14.glBlendEquation(GL14.GL_FUNC_ADD);
@@ -131,27 +139,31 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
                 GL14.glBlendEquation(GL14.GL_FUNC_ADD);
             }
 
-            // Disable Add-color.
+            // Disable Add-color
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         }
 
-        // Disable bright rendering.
+        // Disable bright rendering
         GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, lastBrightnessX, lastBrightnessY);
         RenderHelper.enableStandardItemLighting();
         GL11.glPopAttrib();
 
-        // Render Enchantment effect.
+        // Restore texture
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+
+        // Render Enchantment effect
         if (model.itemStack.hasEffect()) {
             renderEffect(model.getQuadsByName("Hilt"));
             renderEffect(model.getQuadsByName("Hilt_bright"));
         }
 
-        // Disable Culling.
+        // Disable Culling
         if (!isEnableCull) {
             GlStateManager.disableCull();
         }
     }
 
+    // Prepare transform matrices
     public static final Map<TransformType, float[]> transformMatrices;
 
     static {
@@ -253,7 +265,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
     public void renderEffect(List<BakedQuad> quads) {
         BufferBuilder renderer = Tessellator.getInstance().getBuffer();
 
-        // Render Enchantment effect for hilt.
+        // Render Enchantment effect for hilt
         GlStateManager.depthMask(false);
         GlStateManager.depthFunc(GL11.GL_EQUAL);
         GlStateManager.disableLighting();
@@ -289,7 +301,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
     public void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color) {
         renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
-        // Render Quads.
+        // Render Quads
         for (BakedQuad quad : quads) {
             LightUtil.renderQuadColor(renderer, quad, color);
             Vec3i vec3i = quad.getFace().getDirectionVec();
