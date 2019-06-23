@@ -28,7 +28,7 @@ public class LaserBladeClass2Recipe extends ShapedRecipe {
 
         @Override
         public ShapedRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = IRecipeSerializer.field_222157_a.read(recipeId, json);    // field_222157_a = ShapedRecipe.Serializer object
+            ShapedRecipe recipe = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, json);
 
             ItemStack output = LaserBlade.create(recipe.getRecipeOutput())
                     .enchant(Enchantments.SMITE, LaserBlade.LVL_SMITE_CLASS_2)

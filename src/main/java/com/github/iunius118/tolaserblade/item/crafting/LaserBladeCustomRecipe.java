@@ -45,7 +45,7 @@ public class LaserBladeCustomRecipe extends ShapedRecipe {
 
         @Override
         public ShapedRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ShapedRecipe recipe = IRecipeSerializer.field_222157_a.read(recipeId, json);    // field_222157_a = ShapedRecipe.Serializer object
+            ShapedRecipe recipe = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, json);
             ItemStack itemstack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "result"), true);
 
             ItemStack output = LaserBlade.create(itemstack)

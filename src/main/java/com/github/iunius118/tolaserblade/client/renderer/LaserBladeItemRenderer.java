@@ -200,7 +200,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
         float[] matrix;
 
         if (isBlocking) {
-            if (Minecraft.getInstance().gameSettings.field_186715_A == HandSide.RIGHT) {  // field_186715_A = mainHand
+            if (Minecraft.getInstance().gameSettings.mainHand == HandSide.RIGHT) {
                 matrix = transformMatricesBlockingRight.get(cameraTransformType);
             } else {
                 matrix = transformMatricesBlockingLeft.get(cameraTransformType);

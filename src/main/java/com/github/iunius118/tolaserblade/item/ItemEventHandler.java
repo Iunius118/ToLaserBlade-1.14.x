@@ -26,7 +26,7 @@ public class ItemEventHandler {
             ItemStack itemStack1 = itemStack.isEmpty() ? ItemStack.EMPTY : itemStack.copy();
 
             if (event.getTarget().processInitialInteract(event.getEntityPlayer(), event.getHand())) {
-                if (player.playerAbilities.isCreativeMode && itemStack == event.getItemStack() && itemStack.getCount() < itemStack1.getCount()) {
+                if (player.abilities.isCreativeMode && itemStack == event.getItemStack() && itemStack.getCount() < itemStack1.getCount()) {
                     itemStack.setCount(itemStack1.getCount());
                 }
 
@@ -53,7 +53,7 @@ public class ItemEventHandler {
 
                 // Drop Core
                 ItemEntity itemEntity = new ItemEntity(player.world, player.posX, player.posY + 0.5, player.posZ, core);
-                player.world.func_217376_c(itemEntity);   // func_217376_c = spawnEntity
+                player.world.addEntity(itemEntity);
             }
         }
     }

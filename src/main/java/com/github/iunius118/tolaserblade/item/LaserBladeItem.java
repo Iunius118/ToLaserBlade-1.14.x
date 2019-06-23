@@ -103,7 +103,7 @@ public class LaserBladeItem extends SwordItem {
             // Consume Iron Axe damage
             ItemStack ironAxe = right.copy();
             PlayerEntity player = event.getEntityPlayer();
-            ironAxe.func_222118_a(10, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
+            ironAxe.damageItem(10, player, (playerEntity) -> {});
             player.addItemStackToInventory(ironAxe);
         }
     }
@@ -401,7 +401,7 @@ public class LaserBladeItem extends SwordItem {
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (state.getBlockHardness(worldIn, pos) != 0.0F) {
-            stack.func_222118_a(1, entityLiving, (playerEntity) -> playerEntity.func_213361_c(EquipmentSlotType.MAINHAND));  // func_222118_a = damageItem ?
+            stack.damageItem(1, entityLiving, (playerEntity) -> playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
         }
 
         return true;
@@ -409,7 +409,7 @@ public class LaserBladeItem extends SwordItem {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.func_222118_a(1, attacker, (playerEntity) -> playerEntity.func_213361_c(EquipmentSlotType.MAINHAND));  // func_222118_a = damageItem ?
+        stack.damageItem(1, attacker, (playerEntity) -> playerEntity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
         return true;
     }
 

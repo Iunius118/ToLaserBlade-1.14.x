@@ -48,7 +48,7 @@ public class LasarBladeItem extends SwordItem {
 
         if ((block == Blocks.REDSTONE_TORCH || block == Blocks.REDSTONE_WALL_TORCH) && player.canPlayerEdit(pos, facing, itemstack)) {
             int itemDamage = itemstack.getDamage();
-            if (itemDamage >= costDamage || player.playerAbilities.isCreativeMode) {
+            if (itemDamage >= costDamage || player.abilities.isCreativeMode) {
                 // Repair this
                 itemstack.setDamage(itemDamage - costDamage);
             } else {
@@ -69,7 +69,7 @@ public class LasarBladeItem extends SwordItem {
 
         // Damage -> Redstone Torch
 
-        if (!player.playerAbilities.isCreativeMode && itemstack.getDamage() >= costDamage) {
+        if (!player.abilities.isCreativeMode && itemstack.getDamage() >= costDamage) {
             // This is too damaged to place Redstone Torch
             return ActionResultType.PASS;
         }
@@ -77,7 +77,7 @@ public class LasarBladeItem extends SwordItem {
         // Place Redstone Torch and Damage this
         if (player.isSneaking() && Blocks.REDSTONE_TORCH.asItem().onItemUse(context) == ActionResultType.SUCCESS) {
             itemstack.setCount(1);
-            itemstack.func_222118_a(costDamage, player, (playerEntity) -> {});  // func_222118_a = damageItem ?
+            itemstack.damageItem(costDamage, player, (playerEntity) -> {});
             return ActionResultType.SUCCESS;
         }
 

@@ -55,7 +55,7 @@ public class ClientEventHandler {
                     .appendSibling(newVersionHighlighted);
             message.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, result.url));
 
-            Minecraft.getInstance().field_71456_v.getChatGUI().printChatMessage(message);  // field_71456_v = ingameGUI
+            Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
         }
     }
 

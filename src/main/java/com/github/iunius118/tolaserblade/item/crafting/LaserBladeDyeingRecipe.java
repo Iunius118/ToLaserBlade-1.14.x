@@ -70,7 +70,7 @@ public class LaserBladeDyeingRecipe extends ShapelessRecipe {
 
         @Override
         public ShapelessRecipe read(ResourceLocation recipeId, JsonObject json) {
-            ShapelessRecipe recipe = IRecipeSerializer.field_222158_b.read(recipeId, json);    // field_222158_b = ShapelessRecipe.Serializer object
+            ShapelessRecipe recipe = IRecipeSerializer.CRAFTING_SHAPELESS.read(recipeId, json);
             return new LaserBladeDyeingRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeOutput(), recipe.getIngredients());
         }
     }
