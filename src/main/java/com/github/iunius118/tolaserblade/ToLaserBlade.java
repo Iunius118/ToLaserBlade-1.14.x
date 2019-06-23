@@ -69,6 +69,11 @@ public class ToLaserBlade {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ToLaserBladeConfig.commonSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ToLaserBladeConfig.clientSpec);
 
+        // Register client-side mod event handler
+        if (FMLLoader.getDist().isClient()) {
+            FMLJavaModLoadingContext.get().getModEventBus().register(new ClientEventHandler());
+        }
+
         // Register event handlers
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ItemEventHandler());
@@ -84,7 +89,7 @@ public class ToLaserBlade {
     }
 
     private void initClient(final FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        // Use OBJLoader
         OBJLoader.INSTANCE.addDomain(MOD_ID);
     }
 
@@ -136,7 +141,7 @@ public class ToLaserBlade {
     }
 
     @SubscribeEvent
-    public static void remapItems(RegistryEvent.MissingMappings<Item> mappings) {
+    public void remapItems(RegistryEvent.MissingMappings<Item> mappings) {
         for (RegistryEvent.MissingMappings.Mapping<Item> mapping : mappings.getAllMappings()) {
             if (!mapping.key.getNamespace().equals(MOD_ID)) {
                 continue;

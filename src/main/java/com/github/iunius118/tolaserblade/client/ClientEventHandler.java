@@ -59,6 +59,12 @@ public class ClientEventHandler {
         }
     }
 
+
+    @SubscribeEvent
+    public void onItemColorHandlerEvent(ColorHandlerEvent.Item event) {
+        event.getItemColors().register(new LaserBladeItem.ColorHandler(), Items.LASER_BLADE);
+    }
+
     // Model bakery
     @SubscribeEvent
     public void onModelBakeEvent(ModelBakeEvent event) {
@@ -71,11 +77,6 @@ public class ClientEventHandler {
                 event.getModelRegistry().get(ToLaserBlade.MRL_ITEM_LASER_BLADE));
 
         event.getModelRegistry().put(ToLaserBlade.MRL_ITEM_LASER_BLADE, laserBladeModel);
-    }
-
-    @SubscribeEvent
-    public void onItemColorHandlerEvent(ColorHandlerEvent.Item event) {
-        event.getItemColors().register(new LaserBladeItem.ColorHandler(), Items.LASER_BLADE);
     }
 
     public IBakedModel bakeModel(ModelLoader modelLoader, ResourceLocation location) {
