@@ -174,7 +174,7 @@ public class LaserBladeModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return bakedJSONModel.getParticleTexture();
+        return Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(Items.IRON_INGOT);
     }
 
     @Override
