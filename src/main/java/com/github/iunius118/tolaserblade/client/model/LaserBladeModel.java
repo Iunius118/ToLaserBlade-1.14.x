@@ -4,6 +4,7 @@ import com.github.iunius118.tolaserblade.ToLaserBladeConfig;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.UnmodifiableIterator;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.BasicState;
@@ -24,6 +26,8 @@ import net.minecraftforge.common.model.Models;
 import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import java.util.*;
 
@@ -39,13 +43,9 @@ public class LaserBladeModel implements IBakedModel {
 
     public TransformType cameraTransformType = TransformType.NONE;
 
-    public BlockState state;
-    public Direction side;
-    public Random rand;
-
-    public Map<String, List<BakedQuad>> mapQuads_0 = new HashMap<String, List<BakedQuad>>();
-    public Map<String, List<BakedQuad>> mapQuads_1 = new HashMap<String, List<BakedQuad>>();
-    public String[] partNames = {"Hilt", "Hilt_bright", "Blade_core", "Blade_halo_1", "Blade_halo_2"};
+    public Map<String, List<BakedQuad>> mapQuads_0 = new HashMap<>();
+    public Map<String, List<BakedQuad>> mapQuads_1 = new HashMap<>();
+    public final String[] partNames = {"Hilt", "Hilt_bright", "Blade_core", "Blade_halo_1", "Blade_halo_2"};
 
     public LaserBladeModel(IBakedModel bakedOBJModelIn, IBakedModel bakedJSONModelIn) {
         this(bakedOBJModelIn, bakedJSONModelIn, false);
@@ -81,7 +81,7 @@ public class LaserBladeModel implements IBakedModel {
     }
 
     public List<BakedQuad> getQuadsByGroups(IBakedModel bakedModelIn, final List<String> visibleGroups) {
-        List<BakedQuad> quads = Collections.emptyList();
+        List<BakedQuad> quads = null;
 
         if (bakedModelIn instanceof OBJBakedModel) {
             try {
@@ -112,13 +112,17 @@ public class LaserBladeModel implements IBakedModel {
                 // Bake model of visible groups.
                 IBakedModel bakedModel = obj.bake(null, ModelLoader.defaultTextureGetter(), new BasicState(modelState, false), DefaultVertexFormats.ITEM);
 
-                quads = bakedModel.getQuads(null, null, null);
+                quads = bakedModel.getQuads(null, null, new Random());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        return quads;
+        if (quads != null) {
+            return quads;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public void handleItemState(ItemStack itemStackIn, World worldIn, LivingEntity entityLivingBaseIn) {
@@ -128,13 +132,14 @@ public class LaserBladeModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState blockStateIn, Direction direction, Random randIn) {
-        if (side == null) {
-            state = blockStateIn;
-            side = direction;
-            rand = randIn;
+    @Nonnull
+    public List<BakedQuad> getQuads(@Nullable BlockState blockStateIn, @Nullable Direction direction, Random randIn) {
+        if (direction == null) {
+            List<BakedQuad> quads =  bakedOBJModel.getQuads(null, null, randIn);
 
-            return bakedOBJModel.getQuads(null, null, randIn);
+            if (quads != null) {
+                return quads;
+            }
         }
 
         return Collections.emptyList();
