@@ -434,7 +434,7 @@ public class LaserBladeItem extends SwordItem {
     }
 
     @Override
-    public boolean isRepairable() {
+    public boolean isRepairable(ItemStack stack) {
         return false;
     }
 

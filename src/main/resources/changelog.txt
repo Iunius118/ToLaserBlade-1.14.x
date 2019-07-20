@@ -1,6 +1,10 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-2.0.3.1 (Alpha)
+    Port to 1.14.4 on Forge
+    Fix LaserBlade's particle texture
+
 v1.14.3-2.0.3.0 (Alpha)
 
     Port to 1.14.3 on Forge

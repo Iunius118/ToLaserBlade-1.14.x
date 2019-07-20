@@ -321,10 +321,10 @@ public class LaserBlade {
         Biome biome = world.getBiome(player.getPosition());
 
         // Dyeing by Biome type or Biome temperature
-        if (world.getDimension().getType() == DimensionType.field_223228_b_ || biome instanceof NetherBiome) {   // Todo: NETHER = field_223228_b_
+        if (world.getDimension().getType() == DimensionType.THE_NETHER || biome instanceof NetherBiome) {
             // Nether
             flipCoreSubColor();
-        } else if (world.getDimension().getType() == DimensionType.field_223229_c_ || biome instanceof TheEndBiome) {   // Todo: THE_END = field_223229_c_
+        } else if (world.getDimension().getType() == DimensionType.THE_END || biome instanceof TheEndBiome) {
             // The End
             flipHaloSubColor();
         } else if (biome instanceof TheVoidBiome) {
