@@ -94,7 +94,10 @@ public class ToLaserBlade {
     }
 
     public void postInit(InterModProcessEvent event) {
-
+        // TODO: Temporary ItemColors registration (issue ToLaserBlade#1)
+        if (FMLLoader.getDist().isClient()) {
+            ClientEventHandler.registerItemColors();
+        }
     }
 
     @ObjectHolder(MOD_ID)
