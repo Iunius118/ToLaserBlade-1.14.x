@@ -9,8 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -22,7 +20,6 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.BasicState;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
@@ -81,8 +78,8 @@ public class ClientEventHandler {
 
     public IBakedModel bakeModel(ModelLoader modelLoader, ResourceLocation location) {
         try {
-            // IUnbakedModel model = ModelLoaderRegistry.getModelOrMissing(location);
-            IUnbakedModel model = getOBJModel(location);
+            IUnbakedModel model = ModelLoaderRegistry.getModelOrMissing(location);
+            // IUnbakedModel model = getOBJModel(location);
             // logger.info("Loaded obj model: " + model.hashCode());  // for debug
             return model.bake(modelLoader, ModelLoader.defaultTextureGetter(), new BasicState(model.getDefaultState(), false), DefaultVertexFormats.ITEM);
         } catch (Exception e) {
@@ -90,15 +87,5 @@ public class ClientEventHandler {
         }
 
         return null;
-    }
-
-    private IUnbakedModel getOBJModel(ResourceLocation location) throws Exception {
-        // TODO: getOBJModel() is a temporary OBJ model loader until Forge OBJLoader is fixed
-        IResourceManager manager = Minecraft.getInstance().getResourceManager();
-        ResourceLocation file = ModelLoaderRegistry.getActualLocation(location);
-        IResource resource = manager.getResource(file);
-        OBJModel.Parser parser = new OBJModel.Parser(resource, manager);
-        OBJModel model = parser.parse();
-        return model;
     }
 }
