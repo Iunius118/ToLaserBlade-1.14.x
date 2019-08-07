@@ -45,13 +45,13 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
 
         if (model instanceof LaserBladeModel) {
             LaserBladeModel laserBladeModel = (LaserBladeModel) model;
-            doRender(laserBladeModel);
+            doRender(itemStackIn, laserBladeModel);
         }
     }
 
-    public void doRender(LaserBladeModel model) {
+    public void doRender(ItemStack itemStackIn, LaserBladeModel model) {
         BufferBuilder renderer = Tessellator.getInstance().getBuffer();
-        LaserBlade laserBlade = LaserBlade.create(model.itemStack);
+        LaserBlade laserBlade = LaserBlade.create(itemStackIn);
         int colorCore = laserBlade.getCoreColor();
         int colorHalo = laserBlade.getHaloColor();
         boolean isSubColorCore = laserBlade.isCoreSubColor();
@@ -151,7 +151,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
         Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 
         // Render Enchantment effect
-        if (model.itemStack.hasEffect()) {
+        if (itemStackIn.hasEffect()) {
             renderEffect(model.getQuadsByName("Hilt"));
             renderEffect(model.getQuadsByName("Hilt_bright"));
         }

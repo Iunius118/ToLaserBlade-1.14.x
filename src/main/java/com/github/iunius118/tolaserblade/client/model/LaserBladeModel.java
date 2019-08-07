@@ -37,7 +37,7 @@ public class LaserBladeModel implements IBakedModel {
     public IBakedModel bakedOBJModel;
     public final IBakedModel bakedJSONModel;
 
-    public ItemStack itemStack;
+    public ItemStack itemStack = ItemStack.EMPTY;
     public World world;
     public LivingEntity entity;
 
