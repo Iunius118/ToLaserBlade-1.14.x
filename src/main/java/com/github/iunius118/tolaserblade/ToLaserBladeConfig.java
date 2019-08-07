@@ -7,6 +7,7 @@ import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Supplier;
@@ -85,7 +86,9 @@ public class ToLaserBladeConfig {
 
     @SubscribeEvent
     public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
-        if (configEvent.getConfig().getType() == ModConfig.Type.COMMON) {
+        if (configEvent.getConfig().getType() == ModConfig.Type.COMMON
+                && ServerLifecycleHooks.getCurrentServer() != null) {
+            // Send server-side settings to clients
             ServerConfig serverConfig = new ServerConfig();
             serverConfig.isEnabledBlockingWithLaserBladeInServer = COMMON.isEnabledBlockingWithLaserBlade.get();
             serverConfig.laserBladeEfficiencyInServer = COMMON.laserBladeEfficiency.get();
