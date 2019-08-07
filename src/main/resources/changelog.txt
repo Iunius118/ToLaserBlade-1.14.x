@@ -1,38 +1,43 @@
 ToLaserBlade
 Changelog
 
-v1.14.4-2.0.3.2 (Alpha)
+v1.14.4-2.0.4.0
+
+    Port to Forge 1.14.4-28.0.45
+    Sync settings when server-side config file is changed
+
+v1.14.4-2.0.3.2
 
     Fix NullPointerException on ColorHandler registration
 
-v1.14.4-2.0.3.1 (Alpha)
+v1.14.4-2.0.3.1
 
     Port to 1.14.4 on Forge
     Fix LaserBlade's particle texture
 
-v1.14.3-2.0.3.0 (Alpha)
+v1.14.3-2.0.3.0
 
     Port to 1.14.3 on Forge
 
-v1.14.2-2.0.3.0 (Alpha)
+v1.14.2-2.0.3.0
 
     Add simplified Chinese (zh_cn) translation (XuyuEre)
     Add changelog.txt (this file)
 
-v1.14.2-2.0.2.3 (Alpha)
+v1.14.2-2.0.2.3
 
     Port to Forge 1.14.2-26.0.55
 
-v1.14.2-2.0.2.2 (Alpha)
+v1.14.2-2.0.2.2
 
     Update Forge version to 1.14.2-26.0.41
     Restore Laser Blade's model and renderer
 
-v1.14.2-2.0.2.1 (Alpha)
+v1.14.2-2.0.2.1
 
     Modify Laser B1ade to place redstone torch by sneak-right-clicking
 
-v1.14.2-2.0.1.1 (Alpha)
+v1.14.2-2.0.1.1
 
     Initial port to 1.14.2 on Forge
     Laser Blade's model and renderer are not implemented yet
@@ -48,7 +53,7 @@ v1.13.2-2.0.0.1
     Fix dropping Laser Blade Core from destroyed Laser Blade by blocking
     Fix language files
 
-v1.13.2-2.0.0.0 (Beta)
+v1.13.2-2.0.0.0
 
     Bump version to 2.0.0.0 to distinguish version 1.5+ from version 1.4.x or earlier
     Add new Laser Blade upgrade to increase attack damage to 15
@@ -56,23 +61,23 @@ v1.13.2-2.0.0.0 (Beta)
     Add new rendering mode to Laser Blade. This mode will be enabled by setting laserBladeRenderingMode to 1 in config/tolaserblade-client.toml
     Fix entity ghost of Laser Blade Core from destroyed Laser Blade
 
-v1.13.2-1.5.1.0 (Beta)
+v1.13.2-1.5.1.0
 
     Add advancements
     When extracting Laser Blade Core from Laser Blade, the durability of the Iron Axe will be consumed
     Fix to drop Laser Blade Core when Laser Blade broke by attacking entities
     Fix upgrading Laser Blade Core
 
-v1.13.2-1.5.0.2 (Beta)
+v1.13.2-1.5.0.2
 
     Fix combining Laser Blades not to be repair by Core
     [If blocking enabled] Laser Blade is damaged when blocking enemy attack
 
-v1.13.2-1.5.0.1 (Beta)
+v1.13.2-1.5.0.1
 
     Fix repair cost of Laser Blade
 
-v1.13.2-1.5.0.0 (Alpha)
+v1.13.2-1.5.0.0
 
     Add durability to Laser Blade
     Add Laser Blade Core item. You can get a Laser Blade Core when your Laser Blade is destroyed by durability
@@ -85,12 +90,12 @@ v1.13.2-1.5.0.0 (Alpha)
     Add new upgrade system to Laser Blade
     [If blocking enabled] You can use Bow or Trident when you have it in your off-hand and Laser Blade in your main-hand
 
-v1.13.2-1.4.1.0 (Alpha)
+v1.13.2-1.4.1.0
 
     Add Shield ability to Laser Blade (right click and block).
     This is disabled by default. If you want to enable this, please edit config/tolaserblade-common.toml
 
-v1.13.2-1.4.0.0 (Alpha)
+v1.13.2-1.4.0.0
 
     Initial port to 1.13.2 on Forge
 
