@@ -1,8 +1,12 @@
 package com.github.iunius118.tolaserblade;
 
+import com.github.iunius118.tolaserblade.network.ServerConfigMessage;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.function.Supplier;
@@ -77,5 +81,16 @@ public class ToLaserBladeConfig {
     public static class ServerConfig {
         public boolean isEnabledBlockingWithLaserBladeInServer;
         public int laserBladeEfficiencyInServer;
+    }
+
+    @SubscribeEvent
+    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+        if (configEvent.getConfig().getType() == ModConfig.Type.COMMON) {
+            ServerConfig serverConfig = new ServerConfig();
+            serverConfig.isEnabledBlockingWithLaserBladeInServer = COMMON.isEnabledBlockingWithLaserBlade.get();
+            serverConfig.laserBladeEfficiencyInServer = COMMON.laserBladeEfficiency.get();
+
+            ToLaserBlade.NETWORK_HANDLER.getConfigChannel().send(PacketDistributor.ALL.noArg(), new ServerConfigMessage(serverConfig));
+        }
     }
 }

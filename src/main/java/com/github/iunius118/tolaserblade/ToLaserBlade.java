@@ -64,6 +64,7 @@ public class ToLaserBlade {
         modEventBus.addListener(this::initServer);
         modEventBus.addListener(this::initClient);
         modEventBus.addListener(this::postInit);
+        modEventBus.register(ToLaserBladeConfig.class);
 
         // Register config handlers
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ToLaserBladeConfig.commonSpec);
