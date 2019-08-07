@@ -32,7 +32,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 
 import javax.annotation.Nullable;
 
@@ -60,7 +60,7 @@ public class LaserBladeItem extends SwordItem {
 
     public void onCriticalHit(CriticalHitEvent event) {
         Entity target = event.getTarget();
-        LaserBlade laserBlade = LaserBlade.create(event.getEntityPlayer().getHeldItemMainhand());
+        LaserBlade laserBlade = LaserBlade.create(event.getPlayer().getHeldItemMainhand());
 
         if (event.isVanillaCritical()) {
             if (target instanceof WitherEntity || laserBlade.getAttack() > LaserBlade.MOD_ATK_CLASS_4) {
@@ -102,7 +102,7 @@ public class LaserBladeItem extends SwordItem {
             // EXTRACT CORE
             // Consume Iron Axe damage
             ItemStack ironAxe = right.copy();
-            PlayerEntity player = event.getEntityPlayer();
+            PlayerEntity player = event.getPlayer();
             ironAxe.damageItem(10, player, (playerEntity) -> {});
             player.addItemStackToInventory(ironAxe);
         }

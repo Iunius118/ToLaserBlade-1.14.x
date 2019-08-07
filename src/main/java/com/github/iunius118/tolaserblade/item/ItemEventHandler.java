@@ -9,23 +9,23 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 
 public class ItemEventHandler {
     @SubscribeEvent
-    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+    public void onEntityInteract(EntityInteract event) {
         // When player interact with entity
         ItemStack itemStack = event.getItemStack();
 
         if (itemStack.getItem() == ToLaserBlade.Items.LASER_BLADE) {
             // For stopping duplicate of Laser Blade when player interact with Item Frame
             event.setCanceled(true);
-            PlayerEntity player = event.getEntityPlayer();
+            PlayerEntity player = event.getPlayer();
             ItemStack itemStack1 = itemStack.isEmpty() ? ItemStack.EMPTY : itemStack.copy();
 
-            if (event.getTarget().processInitialInteract(event.getEntityPlayer(), event.getHand())) {
+            if (event.getTarget().processInitialInteract(event.getPlayer(), event.getHand())) {
                 if (player.abilities.isCreativeMode && itemStack == event.getItemStack() && itemStack.getCount() < itemStack1.getCount()) {
                     itemStack.setCount(itemStack1.getCount());
                 }
@@ -42,7 +42,7 @@ public class ItemEventHandler {
     @SubscribeEvent
     public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
         // When item destroyed by damage
-        PlayerEntity player = event.getEntityPlayer();
+        PlayerEntity player = event.getPlayer();
 
         if (!player.getEntityWorld().isRemote) {
             ItemStack original = event.getOriginal();
@@ -60,7 +60,7 @@ public class ItemEventHandler {
 
     @SubscribeEvent
     public void onCriticalHit(CriticalHitEvent event) {
-        ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+        ItemStack stack = event.getPlayer().getHeldItemMainhand();
 
         if (stack.getItem() instanceof LaserBladeItem) {
             ((LaserBladeItem) stack.getItem()).onCriticalHit(event);
