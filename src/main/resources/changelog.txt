@@ -1,6 +1,10 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-2.0.4.1
+
+    Compatible with OptiFine
+
 v1.14.4-2.0.4.0
 
     Port to Forge 1.14.4-28.0.45
