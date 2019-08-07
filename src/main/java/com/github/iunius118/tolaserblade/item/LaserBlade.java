@@ -408,8 +408,8 @@ public class LaserBlade {
     public boolean isUpgradedWithNetherStar() {
         return mapEnch.getOrDefault(Enchantments.SMITE, 0) >= LVL_SMITE_CLASS_4
                 && mapEnch.getOrDefault(Enchantments.MENDING, 0) >= 1
-                && !(attack < MOD_ATK_CLASS_4)
-                && !(speed < MOD_SPD_CLASS_3);
+                && attack >= MOD_ATK_CLASS_4
+                && speed >= MOD_SPD_CLASS_3;
     }
 
     public LaserBlade upgradeWithNetherStar() {
