@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("deprecation") // for ItemCameraTransforms
 @OnlyIn(Dist.CLIENT)
 public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
     public static final ResourceLocation LASER_BLADE_TEXTURE_LOCATION = new ResourceLocation(ToLaserBlade.MOD_ID, "textures/item/laser_blade.png");

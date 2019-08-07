@@ -35,7 +35,6 @@ public class ItemEventHandler {
             }
 
             event.setCancellationResult(ActionResultType.PASS);
-            return;
         }
     }
 

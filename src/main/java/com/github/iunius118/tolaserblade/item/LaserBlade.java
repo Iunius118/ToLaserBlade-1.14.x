@@ -237,7 +237,7 @@ public class LaserBlade {
         return mapEnch.getOrDefault(enchantment, 0);
     }
 
-    public boolean isEnchantmentMaxLavel(Enchantment enchantment) {
+    public boolean isEnchantmentMaxLevel(Enchantment enchantment) {
         return mapEnch.getOrDefault(enchantment, 0) >= enchantment.getMaxLevel();
     }
 
@@ -270,7 +270,7 @@ public class LaserBlade {
     }
 
     public LaserBlade setDefaultColors() {
-        CompoundNBT nbt = stack.getOrCreateTag();;
+        CompoundNBT nbt = stack.getOrCreateTag();
         nbt.putInt(KEY_COLOR_CORE, DEFAULT_COLOR_CORE);
         nbt.putInt(KEY_COLOR_HALO, DEFAULT_COLOR_HALO);
         nbt.putBoolean(KEY_IS_SUB_COLOR_CORE, false);
@@ -406,14 +406,10 @@ public class LaserBlade {
     }
 
     public boolean isUpgradedWithNetherStar() {
-        if (mapEnch.getOrDefault(Enchantments.SMITE, 0) < LVL_SMITE_CLASS_4
-                || mapEnch.getOrDefault(Enchantments.MENDING, 0) < 1
-                || attack < MOD_ATK_CLASS_4
-                || speed < MOD_SPD_CLASS_3) {
-            return false;
-        }
-
-        return true;
+        return mapEnch.getOrDefault(Enchantments.SMITE, 0) >= LVL_SMITE_CLASS_4
+                && mapEnch.getOrDefault(Enchantments.MENDING, 0) >= 1
+                && !(attack < MOD_ATK_CLASS_4)
+                && !(speed < MOD_SPD_CLASS_3);
     }
 
     public LaserBlade upgradeWithNetherStar() {
@@ -560,7 +556,7 @@ public class LaserBlade {
         Map<Enchantment, Integer> map = Maps.newLinkedHashMap();
         setSharpnessFromAttack(map);
         setUnbreakingFromSpeed(map);
-        mapEnch.forEach((key, value) -> map.put(key, value));
+        mapEnch.forEach(map::put);
         EnchantmentHelper.setEnchantments(map, itemStack);
 
         return itemStack;

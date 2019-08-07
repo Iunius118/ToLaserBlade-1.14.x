@@ -35,7 +35,7 @@ import java.util.*;
 public class LaserBladeModel implements IBakedModel {
 
     public IBakedModel bakedOBJModel;
-    public IBakedModel bakedJSONModel;
+    public final IBakedModel bakedJSONModel;
 
     public ItemStack itemStack;
     public World world;

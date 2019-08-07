@@ -141,8 +141,6 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
         } else if (isContainedInItemTag(itemRight, "forge:storage_blocks/diamond")) {
             // ATTACK++
             float attack = laserBlade.getAttack();
@@ -155,8 +153,6 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
         } else if (isContainedInItemTag(itemRight, "forge:storage_blocks/redstone")) {
             // SPEED++
             if (laserBlade.getSpeed() < LaserBlade.MOD_SPD_CLASS_3) {
@@ -166,8 +162,6 @@ public class LaserBladeItem extends SwordItem {
                 event.setMaterialCost(1);
                 event.setOutput(laserBlade.getItemStack());
             }
-
-            return;
 
         } else if (getBlockFromItem(itemRight) == Blocks.GLOWSTONE) {
             // SMITE++
@@ -181,11 +175,9 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
         } else if (isContainedInItemTag(itemRight, "forge:rods/blaze")) {
             // FIRE_ASPECT++
-            if (!laserBlade.isEnchantmentMaxLavel(Enchantments.FIRE_ASPECT)) {
+            if (!laserBlade.isEnchantmentMaxLevel(Enchantments.FIRE_ASPECT)) {
                 laserBlade.increaseEnchantmentLevel(Enchantments.FIRE_ASPECT);
                 laserBlade.changeDisplayName(name);
                 event.setCost(laserBlade.getCost());
@@ -193,11 +185,9 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
         } else if (itemRight == Items.ENDER_EYE) {
             // SWEEPING++
-            if (!laserBlade.isEnchantmentMaxLavel(Enchantments.SWEEPING)) {
+            if (!laserBlade.isEnchantmentMaxLevel(Enchantments.SWEEPING)) {
                 laserBlade.increaseEnchantmentLevel(Enchantments.SWEEPING);
                 laserBlade.changeDisplayName(name);
                 event.setCost(laserBlade.getCost());
@@ -205,19 +195,15 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
         } else if (itemRight == Items.NAUTILUS_SHELL) {
             // LOOTING++
-            if (!laserBlade.isEnchantmentMaxLavel(Enchantments.LOOTING)) {
+            if (!laserBlade.isEnchantmentMaxLevel(Enchantments.LOOTING)) {
                 laserBlade.increaseEnchantmentLevel(Enchantments.LOOTING);
                 laserBlade.changeDisplayName(name);
                 event.setCost(laserBlade.getCost());
                 event.setMaterialCost(1);
                 event.setOutput(laserBlade.getItemStack());
             }
-
-            return;
 
         } else if (isContainedInItemTag(itemRight, "forge:ingots/iron")) {
             // REPAIR
@@ -239,8 +225,6 @@ public class LaserBladeItem extends SwordItem {
                 }
             }
 
-            return;
-
         } else if (itemRight == Items.NETHER_STAR) {
             // UPGRADE TO CLASS 4
             laserBlade.upgradeWithNetherStar();
@@ -252,21 +236,15 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
-
-        } else if (getBlockFromItem(itemRight) instanceof AbstractSkullBlock) {
+        } else if (getBlockFromItem(itemRight) instanceof AbstractSkullBlock  && laserBlade.getAttack() >= LaserBlade.MOD_ATK_CLASS_3) {
             // MORE ATTACK++
-            if (laserBlade.getAttack() < LaserBlade.MOD_ATK_CLASS_3) {
-                return;
-            } else if (itemRight == Items.DRAGON_HEAD && laserBlade.getAttack() <= LaserBlade.MOD_ATK_CLASS_4) {
-                // 15 ATTACK DAMAGE
+            if (itemRight == Items.DRAGON_HEAD && laserBlade.getAttack() <= LaserBlade.MOD_ATK_CLASS_4) {
+                // GET 15 ATTACK DAMAGE
                 laserBlade.setAttackIfLess(LaserBlade.MOD_ATK_CLASS_4 + 1.0F);
                 laserBlade.changeDisplayName(name);
                 event.setCost(LaserBlade.COST_LVL_CLASS_4);
                 event.setMaterialCost(1);
                 event.setOutput(laserBlade.getItemStack());
-
-                return;
 
             } else if (laserBlade.getAttack() > LaserBlade.MOD_ATK_CLASS_4 && laserBlade.getAttack() < LaserBlade.MOD_ATK_MAX) {
                 // ATTACK++
@@ -285,7 +263,6 @@ public class LaserBladeItem extends SwordItem {
                 event.setMaterialCost(1);
                 event.setOutput(laserBlade.getItemStack());
 
-                return;
             }
 
         } else if (itemRight == Items.IRON_AXE) {
@@ -309,7 +286,6 @@ public class LaserBladeItem extends SwordItem {
                 event.setOutput(laserBlade.getItemStack());
             }
 
-            return;
         }
     }
 
@@ -323,7 +299,7 @@ public class LaserBladeItem extends SwordItem {
     }
 
     private boolean isContainedInItemTag(Item item, String tag) {
-        return ItemTags.getCollection().get(new ResourceLocation(tag)).contains(item);
+        return ItemTags.getCollection().getOrCreate(new ResourceLocation(tag)).contains(item);
     }
 
     public String getSkullOwnerName(ItemStack stack) {
@@ -341,9 +317,7 @@ public class LaserBladeItem extends SwordItem {
                 }
             }
 
-            if (name != null) {
-                return name;
-            }
+            return name;
         }
 
         return "";

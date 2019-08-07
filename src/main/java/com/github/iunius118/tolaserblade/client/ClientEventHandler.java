@@ -27,7 +27,7 @@ import net.minecraftforge.fml.VersionChecker.Status;
 
 public class ClientEventHandler {
     public static void setTEISR() {
-        LaserBladeItem.properties = LaserBladeItem.properties.setTEISR(() -> () -> new LaserBladeItemRenderer());
+        LaserBladeItem.properties = LaserBladeItem.properties.setTEISR(() -> LaserBladeItemRenderer::new);
     }
 
     public static void checkUpdate() {
@@ -35,7 +35,7 @@ public class ClientEventHandler {
         CheckResult result = VersionChecker.getResult(ModList.get().getModFileById(ToLaserBlade.MOD_ID).getMods().get(0));
         Status status = result.status;
 
-        if (status == Status.PENDING) {
+        if (status == Status.PENDING || result.target == null) {
             // Failed to get update information
             return;
         }
@@ -82,7 +82,7 @@ public class ClientEventHandler {
         event.getModelRegistry().put(ToLaserBlade.MRL_ITEM_LASER_BLADE, laserBladeModel);
     }
 
-    public IBakedModel bakeModel(ModelLoader modelLoader, ResourceLocation location) {
+    private IBakedModel bakeModel(ModelLoader modelLoader, ResourceLocation location) {
         try {
             IUnbakedModel model = ModelLoaderRegistry.getModelOrMissing(location);
             // IUnbakedModel model = getOBJModel(location);

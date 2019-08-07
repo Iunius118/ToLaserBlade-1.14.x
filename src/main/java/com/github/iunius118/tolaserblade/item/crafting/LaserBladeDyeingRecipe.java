@@ -40,7 +40,7 @@ public class LaserBladeDyeingRecipe extends ShapelessRecipe {
             }
         }
 
-        return i == getIngredients().size() && recipeitemhelper.canCraft(this, (IntList) null);
+        return i == getIngredients().size() && recipeitemhelper.canCraft(this, null);
     }
 
     @Override

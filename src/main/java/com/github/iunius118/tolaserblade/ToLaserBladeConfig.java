@@ -61,8 +61,8 @@ public class ToLaserBladeConfig {
         commonSpec = specPair.getRight();
         COMMON = specPair.getLeft();
 
-        COMMON.isEnabledBlockingWithLaserBladeInServer = () -> COMMON.isEnabledBlockingWithLaserBlade.get();
-        COMMON.laserBladeEfficiencyInServer = () -> COMMON.laserBladeEfficiency.get();
+        COMMON.isEnabledBlockingWithLaserBladeInServer = COMMON.isEnabledBlockingWithLaserBlade::get;
+        COMMON.laserBladeEfficiencyInServer = COMMON.laserBladeEfficiency::get;
     }
 
     static final ForgeConfigSpec clientSpec;
