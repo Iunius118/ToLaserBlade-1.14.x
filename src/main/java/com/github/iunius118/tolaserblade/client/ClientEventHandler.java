@@ -15,6 +15,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.BasicState;
 import net.minecraftforge.client.model.ModelLoader;
@@ -55,17 +56,9 @@ public class ClientEventHandler {
         }
     }
 
-    /*
-    // TODO: Registration of ItemColors is moved into ToLaserBlade#postInit (issue ToLaserBlade#1)
     @SubscribeEvent
     public void onItemColorHandlerEvent(ColorHandlerEvent.Item event) {
         event.getItemColors().register(new LaserBladeItem.ColorHandler(), Items.LASER_BLADE);
-    }
-    */
-
-    // TODO: Temporary ItemColors register (issue ToLaserBlade#1)
-    public static void registerItemColors() {
-        Minecraft.getInstance().getItemColors().register(new LaserBladeItem.ColorHandler(), Items.LASER_BLADE);
     }
 
     // Model bakery

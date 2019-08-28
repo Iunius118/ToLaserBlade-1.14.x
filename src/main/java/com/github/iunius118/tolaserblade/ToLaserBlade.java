@@ -72,7 +72,7 @@ public class ToLaserBlade {
 
         // Register client-side mod event handler
         if (FMLLoader.getDist().isClient()) {
-            FMLJavaModLoadingContext.get().getModEventBus().register(new ClientEventHandler());
+            modEventBus.register(new ClientEventHandler());
         }
 
         // Register event handlers
@@ -95,26 +95,21 @@ public class ToLaserBlade {
     }
 
     public void postInit(InterModProcessEvent event) {
-        // TODO: Temporary ItemColors registration (issue ToLaserBlade#1)
-        if (FMLLoader.getDist().isClient()) {
-            ClientEventHandler.registerItemColors();
-        }
+
     }
 
-    @ObjectHolder(MOD_ID)
     public static class Items {
-        public static final Item LASAR_BLADE = null;
-        public static final Item LASER_BLADE = null;
-        public static final Item LASER_BLADE_CORE = null;
+        public static final Item LASAR_BLADE = new LasarBladeItem().setRegistryName(NAME_ITEM_LASAR_BLADE);
+        public static final Item LASER_BLADE = new LaserBladeItem().setRegistryName(NAME_ITEM_LASER_BLADE);
+        public static final Item LASER_BLADE_CORE = new Item((new Item.Properties()).group(ItemGroup.MATERIALS)).setRegistryName(NAME_ITEM_LASER_BLADE_CORE);
     }
 
-    @ObjectHolder(MOD_ID)
     public static class RecipeSerializers {
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_DYEING = null;
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_1 = null;
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_2 = null;
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_3 = null;
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CUSTOM = null;
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_DYEING = new LaserBladeDyeingRecipe.Serializer().setRegistryName(LaserBladeDyeingRecipe.Serializer.NAME);
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_1 = new LaserBladeClass1Recipe.Serializer().setRegistryName(LaserBladeClass1Recipe.Serializer.NAME);
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_2 = new LaserBladeClass2Recipe.Serializer().setRegistryName(LaserBladeClass2Recipe.Serializer.NAME);
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_3 = new LaserBladeClass3Recipe.Serializer().setRegistryName(LaserBladeClass3Recipe.Serializer.NAME);
+        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CUSTOM = new LaserBladeCustomRecipe.Serializer().setRegistryName(LaserBladeCustomRecipe.Serializer.NAME);
     }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -126,20 +121,20 @@ public class ToLaserBlade {
             }
 
             event.getRegistry().registerAll(
-                    new LasarBladeItem().setRegistryName(NAME_ITEM_LASAR_BLADE),
-                    new LaserBladeItem().setRegistryName(NAME_ITEM_LASER_BLADE),
-                    new Item((new Item.Properties()).group(ItemGroup.MATERIALS)).setRegistryName(NAME_ITEM_LASER_BLADE_CORE)
+                    Items.LASAR_BLADE,
+                    Items.LASER_BLADE,
+                    Items.LASER_BLADE_CORE
             );
         }
 
         @SubscribeEvent
         public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
             event.getRegistry().registerAll(
-                    new LaserBladeDyeingRecipe.Serializer().setRegistryName(LaserBladeDyeingRecipe.Serializer.NAME),
-                    new LaserBladeClass1Recipe.Serializer().setRegistryName(LaserBladeClass1Recipe.Serializer.NAME),
-                    new LaserBladeClass2Recipe.Serializer().setRegistryName(LaserBladeClass2Recipe.Serializer.NAME),
-                    new LaserBladeClass3Recipe.Serializer().setRegistryName(LaserBladeClass3Recipe.Serializer.NAME),
-                    new LaserBladeCustomRecipe.Serializer().setRegistryName(LaserBladeCustomRecipe.Serializer.NAME)
+                    RecipeSerializers.CRAFTING_LASER_BLADE_DYEING,
+                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_1,
+                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_2,
+                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_3,
+                    RecipeSerializers.CRAFTING_LASER_BLADE_CUSTOM
             );
         }
     }
