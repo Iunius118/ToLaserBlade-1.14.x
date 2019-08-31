@@ -19,7 +19,8 @@ public class ItemEventHandler {
         // When player interact with entity
         ItemStack itemStack = event.getItemStack();
 
-        if (itemStack.getItem() == ToLaserBlade.Items.LASER_BLADE) {
+        // Redundant Null Check for Forge
+        if (itemStack != null && itemStack.getItem() == ToLaserBlade.Items.LASER_BLADE) {
             // For stopping duplicate of Laser Blade when player interact with Item Frame
             event.setCanceled(true);
             PlayerEntity player = event.getPlayer();
@@ -46,7 +47,8 @@ public class ItemEventHandler {
         if (!player.getEntityWorld().isRemote) {
             ItemStack original = event.getOriginal();
 
-            if (original.getItem() == ToLaserBlade.Items.LASER_BLADE) {
+            // Redundant Null Check for Forge
+            if (original != null && original.getItem() == ToLaserBlade.Items.LASER_BLADE) {
                 LaserBlade laserBlade = LaserBlade.create(original);
                 ItemStack core = laserBlade.saveTagsToItemStack(new ItemStack(ToLaserBlade.Items.LASER_BLADE_CORE));
 
@@ -91,7 +93,8 @@ public class ItemEventHandler {
     public void onAnvilUpdate(AnvilUpdateEvent event) {
         ItemStack left = event.getLeft();
 
-        if (left.getItem() == ToLaserBlade.Items.LASER_BLADE || left.getItem() == ToLaserBlade.Items.LASER_BLADE_CORE) {
+        // Redundant Null Check for Forge
+        if (left != null && (left.getItem() == ToLaserBlade.Items.LASER_BLADE || left.getItem() == ToLaserBlade.Items.LASER_BLADE_CORE)) {
             ((LaserBladeItem) ToLaserBlade.Items.LASER_BLADE).onAnvilUpdate(event);
         }
     }
