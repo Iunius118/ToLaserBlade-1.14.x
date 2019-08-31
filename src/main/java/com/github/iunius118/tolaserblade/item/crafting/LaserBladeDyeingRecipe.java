@@ -2,7 +2,6 @@ package com.github.iunius118.tolaserblade.item.crafting;
 
 import com.github.iunius118.tolaserblade.ToLaserBlade;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
