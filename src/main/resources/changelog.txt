@@ -1,6 +1,11 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-2.0.4.3
+
+    Port to Forge 1.14.4-28.0.75
+    Fix strange behavior with beds and doors
+
 v1.14.4-2.0.4.2
 
     Fix NullPointerException on ColorHandler registration
