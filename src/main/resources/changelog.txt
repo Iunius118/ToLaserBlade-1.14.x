@@ -4,7 +4,7 @@ Changelog
 v1.14.4-2.0.4.3
 
     Port to Forge 1.14.4-28.0.75
-    Fix strange behavior with beds and doors
+    Fix strange behavior with placing blocks
 
 v1.14.4-2.0.4.2
 
