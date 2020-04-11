@@ -9,9 +9,11 @@
 !/docs/
 
 # Gradle
+!/gradle/
 !gradle.properties
 !settings.gradle
 !build.gradle
+!gradlew*
 
 # Others
 !.gitignore

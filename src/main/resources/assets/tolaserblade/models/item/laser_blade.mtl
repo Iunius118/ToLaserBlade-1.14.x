@@ -1,28 +1,40 @@
 # ToLaserBlade
 # https://github.com/Iunius118/ToLaserBlade
-# Copyright 2017 Iunius118
-# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
-# https://creativecommons.org/licenses/by-nc/4.0/
+# Copyright 2020 Iunius118
+# This work is licensed under the MIT License.
 
-# Created by Metasequoia
-
-newmtl mat_Hilt
-Kd 0.75000 0.75000 0.75000
+newmtl mat_hilt
+Kd 0.80000 0.80000 0.80000
 d 1.00000
 map_Kd tolaserblade:item/laser_blade
 
-newmtl mat_Blade_core
+newmtl mat_hilt_bright
+Kd 1.00000 1.00000 1.00000
+d 1.00000
+map_Kd tolaserblade:item/laser_blade
+
+newmtl mat_blade_inner
 Kd 1.00000 1.00000 1.00000
 d 0.90000
 map_Kd tolaserblade:item/laser_blade
 
-newmtl mat_Blade_halo_1
+newmtl mat_blade_outer_1
 Kd 1.00000 1.00000 1.00000
 d 0.50000
 map_Kd tolaserblade:item/laser_blade
 
-newmtl mat_Blade_halo_2
+newmtl mat_blade_outer_2
 Kd 1.00000 1.00000 1.00000
 d 0.25000
+map_Kd tolaserblade:item/laser_blade
+
+newmtl mat_blade_outer_mode_2
+Kd 1.00000 1.00000 1.00000
+d 1.00000
+map_Kd tolaserblade:item/laser_blade
+
+newmtl mat_blade_inner_mode_2
+Kd 1.00000 1.00000 1.00000
+d 1.00000
 map_Kd tolaserblade:item/laser_blade
 

@@ -1,70 +1,106 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-3.0.2.1
+
+    Backport v1.15.2-3.x features to 1.14.4
+    Port to Forge 1.14.4-28.2.0
+    Replace Laser B1ade with DX Laser B1ade
+    Add Broken Laser Blade. Player can get it when the Laser Blade is broken
+    Delete Laser Blade Core. It will be replaced with Broken Laser Blade
+    Add Laser Blade's parts. They are not used and have no recipes
+    Add Light Element enchantment. This increases damage to undead mobs and illagers
+    Change Laser Blade recipes
+    Delete custom Laser Blade recipe types
+    Reduce upgrading and repairing costs of Laser Blade
+    Add item tags to specify materials for Laser Blade upgrade and repair
+    Change advancements. Some advancements are deleted and some new advancements are added
+    Add maxAttackDamageUpgradeCount to tolaserblade-common.toml
+    Add new rendering mode to Laser Blade and replace the previous mode 1 with mode 2
+    Fix Laser Blade's model
+    Add lang/zh_cn.json that is partially translated with reference to what XuyuEre translated in version 2
+    Add JEI plugin to display more anvil recipes
+    Add data generators to generate .json files
+
+
 v1.14.4-2.0.4.3
 
     Port to Forge 1.14.4-28.0.75
     Fix strange behavior with placing blocks
 
+
 v1.14.4-2.0.4.2
 
     Fix NullPointerException on ColorHandler registration
 
+
 v1.14.4-2.0.4.1
 
     Compatible with OptiFine
+
 
 v1.14.4-2.0.4.0
 
     Port to Forge 1.14.4-28.0.45
     Sync settings when server-side config file is changed
 
+
 v1.14.4-2.0.3.2
 
     Fix NullPointerException on ColorHandler registration
+
 
 v1.14.4-2.0.3.1
 
     Port to 1.14.4 on Forge
     Fix LaserBlade's particle texture
 
+
 v1.14.3-2.0.3.0
 
     Port to 1.14.3 on Forge
+
 
 v1.14.2-2.0.3.0
 
     Add simplified Chinese (zh_cn) translation (XuyuEre)
     Add changelog.txt (this file)
 
+
 v1.14.2-2.0.2.3
 
     Port to Forge 1.14.2-26.0.55
+
 
 v1.14.2-2.0.2.2
 
     Update Forge version to 1.14.2-26.0.41
     Restore Laser Blade's model and renderer
 
+
 v1.14.2-2.0.2.1
 
     Modify Laser B1ade to place redstone torch by sneak-right-clicking
+
 
 v1.14.2-2.0.1.1
 
     Initial port to 1.14.2 on Forge
     Laser Blade's model and renderer are not implemented yet
 
+
 v1.13.2-2.0.1.0
 
     Make mining speed of Laser Blade configurable in config/tolaserblade-common.toml
     Add a new recipe type "tolaserblade:crafting_laser_blade_custom" to customize Laser Blade recipe with data pack
+
 
 v1.13.2-2.0.0.1
 
     Fix duplicate Laser Blade Core with Item Frame
     Fix dropping Laser Blade Core from destroyed Laser Blade by blocking
     Fix language files
+
 
 v1.13.2-2.0.0.0
 
@@ -74,6 +110,7 @@ v1.13.2-2.0.0.0
     Add new rendering mode to Laser Blade. This mode will be enabled by setting laserBladeRenderingMode to 1 in config/tolaserblade-client.toml
     Fix entity ghost of Laser Blade Core from destroyed Laser Blade
 
+
 v1.13.2-1.5.1.0
 
     Add advancements
@@ -81,14 +118,17 @@ v1.13.2-1.5.1.0
     Fix to drop Laser Blade Core when Laser Blade broke by attacking entities
     Fix upgrading Laser Blade Core
 
+
 v1.13.2-1.5.0.2
 
     Fix combining Laser Blades not to be repair by Core
     [If blocking enabled] Laser Blade is damaged when blocking enemy attack
 
+
 v1.13.2-1.5.0.1
 
     Fix repair cost of Laser Blade
+
 
 v1.13.2-1.5.0.0
 
@@ -103,19 +143,23 @@ v1.13.2-1.5.0.0
     Add new upgrade system to Laser Blade
     [If blocking enabled] You can use Bow or Trident when you have it in your off-hand and Laser Blade in your main-hand
 
+
 v1.13.2-1.4.1.0
 
     Add Shield ability to Laser Blade (right click and block).
     This is disabled by default. If you want to enable this, please edit config/tolaserblade-common.toml
 
+
 v1.13.2-1.4.0.0
 
     Initial port to 1.13.2 on Forge
+
 
 v1.12.2-1.3.1.0
 
     Add Laser Blade Class 4+
         Adding mob heads to class 4 laser blade with anvil will increase the attack damage
+
 
 v1.12.2-1.3.0.0
 
@@ -123,14 +167,17 @@ v1.12.2-1.3.0.0
     Add config file and config GUI to switch Laser Blade model (3D/2D)
     Add dynamic_lights.properties to be compatible with OptiFine's Dynamic Lights
 
+
 v1.12.2-1.2.2
 
     Add update checker
     Switch LaserBlade renderer from TESR to TileEntityItemStackRenderer
 
+
 v1.12.2-1.2.1
 
     Fix coloring of class 3 upgrade on anvil for keeping original blade colors
+
 
 v1.12.2-1.2.0
 
@@ -146,11 +193,14 @@ v1.12.2-1.2.0
         This group will be rendered brightly
     Amend recipe IDs
 
+
 v1.12.2-1.1.0
 
     Add a new blade color for Savanna biome
     Fix blade color modifier
 
+
 v1.12.2-1.0.0
 
     The first version
+

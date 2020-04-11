@@ -1,27 +1,24 @@
 package com.github.iunius118.tolaserblade.item;
 
-import com.github.iunius118.tolaserblade.ToLaserBlade;
+import com.github.iunius118.tolaserblade.item.crafting.LaserBladeCrafting;
+import com.github.iunius118.tolaserblade.item.upgrade.LaserBladeUpgrade;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ItemEventHandler {
     @SubscribeEvent
-    public void onEntityInteract(EntityInteract event) {
-        // When player interact with entity
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack itemStack = event.getItemStack();
 
         // Redundant Null Check for Forge
-        if (itemStack != null && itemStack.getItem() == ToLaserBlade.Items.LASER_BLADE) {
-            // For stopping duplicate of Laser Blade when player interact with Item Frame
+        if (itemStack != null && itemStack.getItem() == ModItems.LASER_BLADE) {
+            // Avoid duplication of Laser Blade when player interact with Item Frame
             event.setCanceled(true);
             PlayerEntity player = event.getPlayer();
             ItemStack itemStack1 = itemStack.isEmpty() ? ItemStack.EMPTY : itemStack.copy();
@@ -41,20 +38,22 @@ public class ItemEventHandler {
 
     @SubscribeEvent
     public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
-        // When item destroyed by damage
         PlayerEntity player = event.getPlayer();
 
         if (!player.getEntityWorld().isRemote) {
             ItemStack original = event.getOriginal();
 
             // Redundant Null Check for Forge
-            if (original != null && original.getItem() == ToLaserBlade.Items.LASER_BLADE) {
-                LaserBlade laserBlade = LaserBlade.create(original);
-                ItemStack core = laserBlade.saveTagsToItemStack(new ItemStack(ToLaserBlade.Items.LASER_BLADE_CORE));
+            if (original != null && original.getItem() == ModItems.LASER_BLADE) {
+                ItemStack brokenLaserBlade = new ItemStack(ModItems.LB_BROKEN);
+                brokenLaserBlade.setTag(original.getOrCreateTag().copy());
 
-                // Drop Core
-                ItemEntity itemEntity = new ItemEntity(player.world, player.posX, player.posY + 0.5, player.posZ, core);
-                player.world.addEntity(itemEntity);
+                // Add Broken Laser Blade to Player's inventory
+                if (!player.addItemStackToInventory(brokenLaserBlade)) {
+                    // ...or drop it
+                    ItemEntity itemEntity = new ItemEntity(player.world, player.posX, player.posY + 0.5, player.posZ, brokenLaserBlade);
+                    player.world.addEntity(itemEntity);
+                }
             }
         }
     }
@@ -69,23 +68,26 @@ public class ItemEventHandler {
     }
 
     @SubscribeEvent
-    public void onCrafting(ItemCraftedEvent event) {
+    public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
         ItemStack stackOut = event.getCrafting();
+        Item item = stackOut.getItem();
 
-        if (stackOut.getItem() instanceof LaserBladeItem) {
-            ((LaserBladeItem) stackOut.getItem()).onCrafting(event);
+        if (item instanceof LaserBladeItemBase) {
+            (new LaserBladeCrafting(event, (LaserBladeItemBase)item)).getResult();
         }
     }
 
     @SubscribeEvent
     public void onAnvilRepair(AnvilRepairEvent event) {
         ItemStack left = event.getItemInput();
+        Item item = left.getItem();
 
-        if (left.getItem() instanceof LaserBladeItem) {
-            ((LaserBladeItem) left.getItem()).onAnvilRepair(event);
+        if (left.getItem() instanceof LaserBladeItemBase) {
             event.setBreakChance(0.075F);
-        } else if (left.getItem() == ToLaserBlade.Items.LASER_BLADE_CORE) {
-            event.setBreakChance(0.075F);
+
+            if (item == ModItems.LASER_BLADE) {
+                LaserBladeUpgrade.onAnvilRepair(event);
+            }
         }
     }
 
@@ -94,8 +96,8 @@ public class ItemEventHandler {
         ItemStack left = event.getLeft();
 
         // Redundant Null Check for Forge
-        if (left != null && (left.getItem() == ToLaserBlade.Items.LASER_BLADE || left.getItem() == ToLaserBlade.Items.LASER_BLADE_CORE)) {
-            ((LaserBladeItem) ToLaserBlade.Items.LASER_BLADE).onAnvilUpdate(event);
+        if (left != null && left.getItem() instanceof LaserBladeItemBase) {
+            LaserBladeUpgrade.onAnvilUpdate(event, (LaserBladeItemBase)left.getItem());
         }
     }
 }

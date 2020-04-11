@@ -2,7 +2,6 @@
 modLoader="javafml"
 loaderVersion="[28,)"
 issueTrackerURL="https://github.com/Iunius118/ToLaserBlade/issues"
-logoFile="tolaserblade_logo.png"
 
 [[mods]]
 modId="tolaserblade"

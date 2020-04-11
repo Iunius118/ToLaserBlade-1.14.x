@@ -1,15 +1,11 @@
 package com.github.iunius118.tolaserblade.client;
 
 import com.github.iunius118.tolaserblade.ToLaserBlade;
-import com.github.iunius118.tolaserblade.ToLaserBlade.Items;
-import com.github.iunius118.tolaserblade.client.model.LaserBladeModel;
-import com.github.iunius118.tolaserblade.client.renderer.LaserBladeItemRenderer;
-import com.github.iunius118.tolaserblade.item.LaserBladeItem;
+import com.github.iunius118.tolaserblade.client.model.LaserBladeItemBakedModel;
+import com.github.iunius118.tolaserblade.client.model.LaserBladeItemModel;
+import com.github.iunius118.tolaserblade.item.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -17,9 +13,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.BasicState;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
@@ -27,8 +20,24 @@ import net.minecraftforge.fml.VersionChecker.CheckResult;
 import net.minecraftforge.fml.VersionChecker.Status;
 
 public class ClientEventHandler {
-    public static void setTEISR() {
-        LaserBladeItem.properties = LaserBladeItem.properties.setTEISR(() -> LaserBladeItemRenderer::new);
+    @SubscribeEvent
+    public void onItemColorHandlerEvent(ColorHandlerEvent.Item event) {
+        event.getItemColors().register(new LaserBladeItem.ColorHandler(), ModItems.LASER_BLADE);
+        event.getItemColors().register(new LaserBladeItem.ColorHandler(), ModItems.LB_BROKEN);
+        event.getItemColors().register(new LBEmitterItem.ColorHandler(), ModItems.LB_EMITTER);
+        event.getItemColors().register(new LBMediumItem.ColorHandler(), ModItems.LB_MEDIUM);
+        event.getItemColors().register(new LBCasingItem.ColorHandler(), ModItems.LB_CASING);
+    }
+
+    @SubscribeEvent
+    public void onModelBakeEvent(ModelBakeEvent event) {
+        ModelResourceLocation laserBladeItemID = new ModelResourceLocation(ModItems.LASER_BLADE.getRegistryName(), "inventory");
+        ModelResourceLocation lBBrokenItemID = new ModelResourceLocation(ModItems.LB_BROKEN.getRegistryName(), "inventory");
+
+        event.getModelRegistry().put(laserBladeItemID, new LaserBladeItemBakedModel(event.getModelRegistry().get(laserBladeItemID)));
+        event.getModelRegistry().put(lBBrokenItemID, new LaserBladeItemBakedModel(event.getModelRegistry().get(lBBrokenItemID)));
+
+        LaserBladeItemModel.loadLaserBladeOBJModel(event.getModelLoader());
     }
 
     public static void checkUpdate() {
@@ -48,43 +57,11 @@ public class ClientEventHandler {
             ITextComponent newVersionHighlighted = new StringTextComponent(result.target.toString());
             newVersionHighlighted.getStyle().setColor(TextFormatting.YELLOW);
 
-            ITextComponent message = new TranslationTextComponent("tolaserblade.update.newversion", modNameHighlighted).appendText(": ")
+            ITextComponent message = new TranslationTextComponent("tolaserblade.update.newVersion", modNameHighlighted).appendText(": ")
                     .appendSibling(newVersionHighlighted);
             message.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, result.url));
 
             Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
         }
-    }
-
-    @SubscribeEvent
-    public void onItemColorHandlerEvent(ColorHandlerEvent.Item event) {
-        event.getItemColors().register(new LaserBladeItem.ColorHandler(), Items.LASER_BLADE);
-    }
-
-    // Model bakery
-    @SubscribeEvent
-    public void onModelBakeEvent(ModelBakeEvent event) {
-        ModelLoader modelLoader = event.getModelLoader();
-        LaserBladeModel laserBladeModel;
-
-        laserBladeModel = new LaserBladeModel(
-                bakeModel(modelLoader, ToLaserBlade.RL_OBJ_ITEM_LASER_BLADE),
-                bakeModel(modelLoader, ToLaserBlade.RL_OBJ_ITEM_LASER_BLADE_1),
-                event.getModelRegistry().get(ToLaserBlade.MRL_ITEM_LASER_BLADE));
-
-        event.getModelRegistry().put(ToLaserBlade.MRL_ITEM_LASER_BLADE, laserBladeModel);
-    }
-
-    private IBakedModel bakeModel(ModelLoader modelLoader, ResourceLocation location) {
-        try {
-            IUnbakedModel model = ModelLoaderRegistry.getModelOrMissing(location);
-            // IUnbakedModel model = getOBJModel(location);
-            // logger.info("Loaded obj model: " + model.hashCode());  // for debug
-            return model.bake(modelLoader, ModelLoader.defaultTextureGetter(), new BasicState(model.getDefaultState(), false), DefaultVertexFormats.ITEM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 }

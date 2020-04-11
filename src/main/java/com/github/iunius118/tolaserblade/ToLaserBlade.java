@@ -1,55 +1,53 @@
 package com.github.iunius118.tolaserblade;
 
 import com.github.iunius118.tolaserblade.client.ClientEventHandler;
-import com.github.iunius118.tolaserblade.item.ItemEventHandler;
-import com.github.iunius118.tolaserblade.item.LasarBladeItem;
-import com.github.iunius118.tolaserblade.item.LaserBladeItem;
-import com.github.iunius118.tolaserblade.item.crafting.*;
+import com.github.iunius118.tolaserblade.data.*;
+import com.github.iunius118.tolaserblade.enchantment.LightElementEnchantment;
+import com.github.iunius118.tolaserblade.enchantment.ModEnchantments;
+import com.github.iunius118.tolaserblade.item.*;
 import com.github.iunius118.tolaserblade.network.NetworkHandler;
 import com.github.iunius118.tolaserblade.network.ServerConfigMessage;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import com.github.iunius118.tolaserblade.util.ModSoundEvents;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.network.NetworkDirection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mod(ToLaserBlade.MOD_ID)
+@EventBusSubscriber
 public class ToLaserBlade {
     public static final String MOD_ID = "tolaserblade";
     public static final String MOD_NAME = "ToLaserBlade";
 
-    public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-
-    public static final String NAME_ITEM_LASAR_BLADE = "lasar_blade";
-
-    public static final String NAME_ITEM_LASER_BLADE = "laser_blade";
-    public static final ModelResourceLocation MRL_ITEM_LASER_BLADE = new ModelResourceLocation(MOD_ID + ":" + NAME_ITEM_LASER_BLADE, "inventory");
-    public static final ResourceLocation RL_OBJ_ITEM_LASER_BLADE = new ResourceLocation(MOD_ID, "item/laser_blade.obj");
-    public static final ResourceLocation RL_OBJ_ITEM_LASER_BLADE_1 = new ResourceLocation(MOD_ID, "item/laser_blade_1.obj");
-
-    public static final String NAME_ITEM_LASER_BLADE_CORE = "laser_blade_core";
+    public static final Logger LOGGER = LogManager.getLogger();
+    public static final ModItems ITEMS = new ModItems();
+    public static final ModEnchantments ENCHANTMENTS = new ModEnchantments();
+    public static final ModSoundEvents SOUND_EVENTS = new ModSoundEvents();
 
     public static boolean hasShownUpdate = false;
 
@@ -59,10 +57,6 @@ public class ToLaserBlade {
     public ToLaserBlade() {
         // Register lifecycle event listeners
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::preInit);
-        modEventBus.addListener(this::initServer);
-        modEventBus.addListener(this::initClient);
-        modEventBus.addListener(this::postInit);
         modEventBus.register(ToLaserBladeConfig.class);
 
         // Register config handlers
@@ -79,85 +73,100 @@ public class ToLaserBlade {
         MinecraftForge.EVENT_BUS.register(new ItemEventHandler());
     }
 
-
-    public void preInit(final FMLCommonSetupEvent event) {
-
-    }
-
-    private void initServer(final FMLDedicatedServerSetupEvent event) {
-
-    }
-
-    private void initClient(final FMLClientSetupEvent event) {
-        // Use OBJLoader
-        OBJLoader.INSTANCE.addDomain(MOD_ID);
-    }
-
-    public void postInit(InterModProcessEvent event) {
-
-    }
-
-    public static class Items {
-        public static final Item LASAR_BLADE = new LasarBladeItem().setRegistryName(NAME_ITEM_LASAR_BLADE);
-        public static final Item LASER_BLADE = new LaserBladeItem().setRegistryName(NAME_ITEM_LASER_BLADE);
-        public static final Item LASER_BLADE_CORE = new Item((new Item.Properties()).group(ItemGroup.MATERIALS)).setRegistryName(NAME_ITEM_LASER_BLADE_CORE);
-    }
-
-    public static class RecipeSerializers {
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_DYEING = new LaserBladeDyeingRecipe.Serializer().setRegistryName(LaserBladeDyeingRecipe.Serializer.NAME);
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_1 = new LaserBladeClass1Recipe.Serializer().setRegistryName(LaserBladeClass1Recipe.Serializer.NAME);
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_2 = new LaserBladeClass2Recipe.Serializer().setRegistryName(LaserBladeClass2Recipe.Serializer.NAME);
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CLASS_3 = new LaserBladeClass3Recipe.Serializer().setRegistryName(LaserBladeClass3Recipe.Serializer.NAME);
-        public static final IRecipeSerializer CRAFTING_LASER_BLADE_CUSTOM = new LaserBladeCustomRecipe.Serializer().setRegistryName(LaserBladeCustomRecipe.Serializer.NAME);
-    }
+    /*
+     * Registry Events
+     */
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
+        // Register items
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-            if (FMLLoader.getDist().isClient()) {
-                ClientEventHandler.setTEISR();
-            }
-
             event.getRegistry().registerAll(
-                    Items.LASAR_BLADE,
-                    Items.LASER_BLADE,
-                    Items.LASER_BLADE_CORE
+                    new DXLaserBladeItem().setRegistryName("dx_laser_blade"),
+                    new LaserBladeItem().setRegistryName("laser_blade"),
+                    new LBBrokenItem().setRegistryName("lb_broken"),
+                    new LBBlueprintItem().setRegistryName("lb_blueprint"),
+                    new LBDisassembledItem().setRegistryName("lb_disassembled"),
+                    new LBBatteryItem().setRegistryName("lb_battery"),
+                    new LBMediumItem().setRegistryName("lb_medium"),
+                    new LBEmitterItem().setRegistryName("lb_emitter"),
+                    new LBCasingItem().setRegistryName("lb_casing")
+            );
+        }
+
+        // Register Enchantments
+        @SubscribeEvent
+        public static void onEnchantmentRegistry(final RegistryEvent.Register<Enchantment> event) {
+            event.getRegistry().registerAll(
+                    new LightElementEnchantment().setRegistryName(LightElementEnchantment.ID)
+            );
+        }
+
+        // Register Sound Events
+        @SubscribeEvent
+        public static void onSoundEventRegistry(final RegistryEvent.Register<SoundEvent> event) {
+            event.getRegistry().registerAll(
+                    new SoundEvent(new ResourceLocation(MOD_ID, "item.dx_laser_blade.swing")).setRegistryName("item_dx_laser_blade_swing")
             );
         }
 
         @SubscribeEvent
         public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
-            event.getRegistry().registerAll(
-                    RecipeSerializers.CRAFTING_LASER_BLADE_DYEING,
-                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_1,
-                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_2,
-                    RecipeSerializers.CRAFTING_LASER_BLADE_CLASS_3,
-                    RecipeSerializers.CRAFTING_LASER_BLADE_CUSTOM
-            );
+
+        }
+
+        // Generate data
+        @SubscribeEvent
+        public static void gatherData(GatherDataEvent event) {
+            DataGenerator gen = event.getGenerator();
+
+            if (event.includeServer()) {
+                gen.addProvider(new TLBRecipeProvider(gen));    // Recipes
+                gen.addProvider(new TLBItemTagsProvider(gen));  // Item tags
+                gen.addProvider(new TLBAdvancementProvider(gen));   // Advancements
+            }
+
+            if (event.includeClient()) {
+                ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+
+                gen.addProvider(new TLBItemModelProvider(gen, existingFileHelper)); // Item models
+                TLBLanguageProvider.addProviders(gen);  // Languages
+                gen.addProvider(new TLBSoundProvider(gen)); // Sounds
+            }
         }
     }
 
-    @SubscribeEvent
-    public void remapItems(RegistryEvent.MissingMappings<Item> mappings) {
-        for (RegistryEvent.MissingMappings.Mapping<Item> mapping : mappings.getAllMappings()) {
-            if (!mapping.key.getNamespace().equals(MOD_ID)) {
-                continue;
-            }
+    /*
+     * Remapping Items
+     */
 
-            String name = mapping.key.getPath();
-            if (name.equals(MOD_ID + "." + NAME_ITEM_LASER_BLADE)) {
-                // Replace item ID "tolaserblade:tolaserblade.laser_blade" (-1.11.2) with "tolaserblade:laser_blade" (1.12-)
-                mapping.remap(ToLaserBlade.Items.LASER_BLADE);
-            }
-        }
+    @SubscribeEvent
+    public static void remapItems(RegistryEvent.MissingMappings<Item> mappings) {
+        final Map<ResourceLocation, Item> remappingItemMap = new HashMap<>();
+        // Replace item ID "tolaserblade:tolaserblade.laser_blade" (-1.11.2) with "tolaserblade:laser_blade" (1.12-)
+        remappingItemMap.put(new ResourceLocation(MOD_ID, "tolaserblade.laser_blade"), ModItems.LASER_BLADE);
+
+        // Replace item ID "tolaserblade:lasar_blade" (-1.14.4 v2.x) with "tolaserblade:dx_laser_blade" (1.14.4 v3-)
+        remappingItemMap.put(new ResourceLocation(MOD_ID, "lasar_blade"), ModItems.DX_LASER_BLADE);
+
+        // Replace item ID "tolaserblade:laser_blade_core" (-1.14.4 v2.x) with "tolaserblade:lb_broken" (1.14.4 v3-)
+        remappingItemMap.put(new ResourceLocation(MOD_ID, "laser_blade_core"), ModItems.LB_BROKEN);
+
+        // Replace item IDs
+        mappings.getAllMappings().stream()
+                .filter(mapping -> mapping.key.getNamespace().equals(MOD_ID) && remappingItemMap.containsKey(mapping.key))
+                .forEach(mapping -> mapping.remap(remappingItemMap.get(mapping.key)));
     }
 
+    /*
+     * World Events
+     */
+
     @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        // Send server-side config to logged-in players
         ToLaserBladeConfig.ServerConfig serverConfig = new ToLaserBladeConfig.ServerConfig();
-        serverConfig.isEnabledBlockingWithLaserBladeInServer = ToLaserBladeConfig.COMMON.isEnabledBlockingWithLaserBlade.get();
-        serverConfig.laserBladeEfficiencyInServer = ToLaserBladeConfig.COMMON.laserBladeEfficiency.get();
 
         NETWORK_HANDLER.getConfigChannel().sendTo(
                 new ServerConfigMessage(serverConfig),
@@ -180,7 +189,6 @@ public class ToLaserBlade {
         /*
         // For debug
         String str = event.getSource().getDamageType() + " caused " + event.getAmount() + " point damage to " + event.getEntityLiving().getName().getFormattedText() + "!";
-
         if (FMLLoader.getDist().isClient()) {
             Minecraft.getInstance().ingameGUI.addChatMessage(ChatType.SYSTEM, new StringTextComponent(str));
         } else {
