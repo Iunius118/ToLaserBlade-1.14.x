@@ -1,4 +1,4 @@
-package com.github.iunius118.tolaserblade.client.renderer;
+package com.github.iunius118.tolaserblade.client.renderer.item;
 
 import com.github.iunius118.tolaserblade.client.model.LaserBladeItemModel;
 import com.github.iunius118.tolaserblade.item.ModItems;
