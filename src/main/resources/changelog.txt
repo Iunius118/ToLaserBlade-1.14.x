@@ -1,6 +1,11 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-3.0.3.0
+
+    Add laser trap to attack by Laser Blade put in dispenser
+
+
 v1.14.4-3.0.2.1
 
     Backport v1.15.2-3.x features to 1.14.4
