@@ -84,7 +84,7 @@ public class ToLaserBladeConfig {
             laserBladeRenderingMode = builder
                     .comment("Select rendering mode of Laser Blade (0-2). This option is available when enableLaserBlade3DModel is true.\n" +
                             "  Mode 0: using old default model. Mode 1: Not using additive blending. Mode 2: using new default model.\n" +
-                            "Default: 0")
+                            "Default: 2")
                     .translation("tolaserblade.configgui.client.laserBladeRenderingMode")
                     .defineInRange("laserBladeRenderingMode", 2, 0, 2);
 
