@@ -90,14 +90,16 @@ public class LaserBladeItemModel {
     public enum Part {
         // Names for legacy OBJModel
         HILT("hilt"),
-        HILT_2("hilt_2"),
+        HILT_0_2("hilt_0_2"),
         HILT_NO_TINT("hilt_no_tint"),
         HILT_BRIGHT("hilt_bright"),
-        BLADE_INNER("blade_inner"),
-        BLADE_OUTER_1("blade_outer_1"),
-        BLADE_OUTER_2("blade_outer_2"),
-        BLADE_OUTER_MODE_2("blade_outer_mode_2"),
-        BLADE_INNER_MODE_2("blade_inner_mode_2");
+        BLADE_OUT_2("blade_out_2"),
+        BLADE_MID_2("blade_mid_2"),
+        BLADE_IN("blade_in_0_2"),
+        BLADE_MID_0("blade_mid_0"),
+        BLADE_OUT_0("blade_out_0"),
+        BLADE_OUT_1("blade_out_1"),
+        BLADE_IN_1("blade_in_1");
 
         private String name;
 

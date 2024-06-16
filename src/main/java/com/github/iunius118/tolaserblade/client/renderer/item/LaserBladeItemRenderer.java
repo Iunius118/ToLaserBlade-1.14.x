@@ -82,7 +82,7 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
         boolean isOuterSubColor = bladeColor.getRight();
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT), gripColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_2), gripColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_0_2), gripColor);
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_NO_TINT), -1);
 
         renderAsEmittingPart(true);
@@ -94,12 +94,12 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
 
         if (!isInnerSubColor) GL14.glBlendEquation(GL14.GL_FUNC_ADD);
         else GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_INNER), innerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_IN), innerColor);
 
         if (!isOuterSubColor) GL14.glBlendEquation(GL14.GL_FUNC_ADD);
         else GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUTER_1), outerColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUTER_2), outerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_MID_0), outerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUT_0), outerColor);
 
         // Disable Add-color
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -120,15 +120,13 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
         innerColor = (bladeColor.getRight() ? ~innerColor : innerColor) | 0xFF000000;
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT), gripColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_2), gripColor);
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_NO_TINT), -1);
 
         renderAsEmittingPart(true);
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_BRIGHT), -1);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_INNER), innerColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUTER_1), outerColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUTER_2), outerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUT_1), outerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_IN_1), innerColor);
 
         renderAsEmittingPart(false);
     }
@@ -136,22 +134,37 @@ public class LaserBladeItemRenderer extends ItemStackTileEntityRenderer {
     private void renderLaserBladeMode2(ItemStack itemStack, BufferBuilder renderer) {
         int gripColor = ModItems.LASER_BLADE.checkGamingColor(ModItems.LASER_BLADE.getGripColor(itemStack));
 
-        Pair<Integer, Boolean> bladeColor = ModItems.LASER_BLADE.getBladeOuterColor(itemStack);
-        int outerColor = ModItems.LASER_BLADE.checkGamingColor(bladeColor.getLeft());
-        outerColor = (bladeColor.getRight() ? ~outerColor : outerColor) | 0xFF000000;
-
-        bladeColor = ModItems.LASER_BLADE.getBladeInnerColor(itemStack);
+        Pair<Integer, Boolean> bladeColor = ModItems.LASER_BLADE.getBladeInnerColor(itemStack);
         int innerColor = ModItems.LASER_BLADE.checkGamingColor(bladeColor.getLeft());
-        innerColor = (bladeColor.getRight() ? ~innerColor : innerColor) | 0xFF000000;
+        boolean isInnerSubColor = bladeColor.getRight();
+
+        bladeColor = ModItems.LASER_BLADE.getBladeOuterColor(itemStack);
+        int outerColor = ModItems.LASER_BLADE.checkGamingColor(bladeColor.getLeft());
+        boolean isOuterSubColor = bladeColor.getRight();
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT), gripColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_0_2), gripColor);
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_NO_TINT), -1);
 
         renderAsEmittingPart(true);
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_BRIGHT), -1);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_INNER_MODE_2), innerColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUTER_MODE_2), outerColor);
+
+        // Enable additive blending
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+
+        if (!isOuterSubColor) GL14.glBlendEquation(GL14.GL_FUNC_ADD);
+        else GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_OUT_2), outerColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_MID_2), outerColor);
+
+        if (!isInnerSubColor) GL14.glBlendEquation(GL14.GL_FUNC_ADD);
+        else GL14.glBlendEquation(GL14.GL_FUNC_REVERSE_SUBTRACT);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.BLADE_IN), innerColor);
+
+        // Disable Add-color
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GL14.glBlendEquation(GL14.GL_FUNC_ADD);
 
         renderAsEmittingPart(false);
     }

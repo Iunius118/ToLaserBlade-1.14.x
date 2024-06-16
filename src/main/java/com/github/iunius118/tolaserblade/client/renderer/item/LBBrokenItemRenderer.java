@@ -32,7 +32,7 @@ public class LBBrokenItemRenderer extends LaserBladeItemRenderer  {
         int gripColor = ModItems.LASER_BLADE.checkGamingColor(ModItems.LASER_BLADE.getGripColor(itemStackIn));
 
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT), gripColor);
-        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_2), gripColor);
+        renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_0_2), gripColor);
         renderQuads(renderer, getBakedQuads(LaserBladeItemModel.Part.HILT_NO_TINT), -1);
 
         renderAsEmittingPart(true);
