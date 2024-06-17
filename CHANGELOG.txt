@@ -1,9 +1,17 @@
 ToLaserBlade
 Changelog
 
+v1.14.4-3.0.4.1
+
+    Require Forge 1.14.4-28.2.26
+    Fix some texts
+
+
 v1.14.4-3.0.4.0
 
-    Improve laser blade model and change default rendering mode to number 2
+    Improve laser blade model
+    Change default rendering mode to number 2
+
 
 v1.14.4-3.0.3.2
 

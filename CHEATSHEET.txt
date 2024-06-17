@@ -1,14 +1,14 @@
 # Cheatsheet
 
 [ToLaserBlade](https://github.com/Iunius118/ToLaserBlade)
-Version 1.14.4-3.0.4.0.
+Version 1.14.4-3.0.4.1.
 
 Adds a simple sword with a laser blade.
 
 ## Requirements
 
 - Minecraft 1.14.4
-- Forge 1.14.4-28.2.0+
+- Forge 1.14.4-28.2.26+
 
 ## How to Get Started
 
@@ -99,9 +99,11 @@ Anvil Recipes:
 
 Anvil Recipes:
 
-- Laser Blade + dye item → changing color of inner part of blade
-- Laser Blade + stained glass → changing color of outer part of blade
-- Laser Blade + carpet → changing grip color
+- Laser Blade + Stained Glass → changing color of outer part of blade
+- Laser Blade + Stained Glass pane → changing color of inner part of blade
+- Laser Blade + Carpet → changing grip color
+- Laser Blade + Paper named FATE → switching blend mode of outer part
+- Laser Blade + Paper named OGRE → switching blend mode of inner part
 
 #### Repairing Laser Blade
 
@@ -113,6 +115,19 @@ Anvil Recipe:
 
 When a laser blade is set in a dispenser and activated, it can attack mobs in front of the dispenser with the laser blade.
 This attack is only affected by the laser blade's attack damage and the Looting enchantment.
+
+### Not Used Items
+
+These items are not used and have no recipes:
+
+- Laser Blade Blueprint
+- Disassembled Laser Blade
+- LB Energy Cell
+- Laser Medium
+- Laser Blade Emitter
+- Laser Blade Casing
+
+They will be used for customizing recipe by players.
 
 ## Configurations
 
